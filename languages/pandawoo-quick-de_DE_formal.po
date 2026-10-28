@@ -1,0 +1,478 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PandaWoo Quick 0.2.5\n"
+"Report-Msgid-Bugs-To: https://github.com/kultur3gmbh/pandawoo-quick/issues\n"
+"POT-Creation-Date: 2026-10-28 00:00+0000\n"
+"PO-Revision-Date: 2026-10-28 00:00+0000\n"
+"Last-Translator: Kultur³ GmbH\n"
+"Language-Team: ContactPanda\n"
+"Language: de_DE_formal\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Domain: pandawoo-quick\n"
+
+#: includes/class-pandawoo-quick-core.php:87
+msgid "%d photos selected"
+msgstr "%d Fotos ausgewählt"
+
+#: includes/class-pandawoo-quick-core.php:346
+msgid "A future upgrade for managing several shops at the same time. Quick Free keeps all product capture features and supports one active shop connection."
+msgstr "Eine zukünftige Erweiterung zur gleichzeitigen Verwaltung mehrerer Shops. Quick Free behält alle Funktionen zur Produkterfassung und unterstützt eine aktive Shop-Verbindung."
+
+#: includes/class-pandawoo-quick-core.php:111
+msgid "Add"
+msgstr "Hinzufügen"
+
+#: includes/class-pandawoo-quick-core.php:102
+msgid "Add PandaWoo Quick to the Home Screen"
+msgstr "PandaWoo Quick zum Home-Bildschirm hinzufügen"
+
+#: includes/class-pandawoo-quick-core.php:107
+msgid "Add to Home Screen"
+msgstr "Zum Home-Bildschirm hinzufügen"
+
+#: includes/class-pandawoo-quick-core.php:183
+msgid "All statuses"
+msgstr "Alle Status"
+
+#: includes/class-pandawoo-quick-core.php:462
+msgid "An image selection is invalid."
+msgstr "Eine Bildauswahl ist ungültig."
+
+#: includes/class-pandawoo-quick-core.php:344
+msgid "An optional free CRM foundation for customer and contact management. PandaWoo Quick works fully without it."
+msgstr "Eine optionale kostenlose CRM-Grundlage für die Kunden- und Kontaktverwaltung. PandaWoo Quick funktioniert vollständig ohne sie."
+
+#: includes/class-pandawoo-quick-core.php:425
+msgid "At least one photo could not be uploaded."
+msgstr "Mindestens ein Foto konnte nicht hochgeladen werden."
+
+#: includes/class-pandawoo-quick-core.php:198
+msgid "Brand"
+msgstr "Marke"
+
+#: includes/class-pandawoo-quick-core.php:175
+msgid "Capture and maintain WooCommerce products from your phone."
+msgstr "Erfassen und bearbeiten Sie WooCommerce-Produkte mit Ihrem Smartphone."
+
+#: includes/class-pandawoo-quick-core.php:194
+msgid "Category"
+msgstr "Kategorie"
+
+#: includes/class-pandawoo-quick-core.php:115
+msgid "Confirm installation"
+msgstr "Installation bestätigen"
+
+#: includes/class-pandawoo-quick-core.php:176
+msgid "Connect a phone"
+msgstr "Smartphone verbinden"
+
+#: includes/class-pandawoo-quick-core.php:325
+msgid "Connected phones"
+msgstr "Verbundene Smartphones"
+
+#: includes/class-pandawoo-quick-core.php:344
+msgid "ContactPanda Basic"
+msgstr "ContactPanda Basic"
+
+#: includes/class-pandawoo-quick-core.php:346
+msgid "ContactPanda Plus and Pro"
+msgstr "ContactPanda Plus und Pro"
+
+#: includes/class-pandawoo-quick-core.php:342
+msgid "ContactPanda is active"
+msgstr "ContactPanda ist aktiv"
+
+#: includes/class-pandawoo-quick-core.php:82
+msgid "Cover image"
+msgstr "Titelbild"
+
+#: includes/class-pandawoo-quick-core.php:202
+msgid "Detailed description"
+msgstr "Ausführliche Beschreibung"
+
+#: includes/class-pandawoo-quick-core.php:328
+msgid "Disconnect"
+msgstr "Trennen"
+
+#: includes/class-pandawoo-quick-core.php:182
+msgid "Disconnect shop"
+msgstr "Shop trennen"
+
+#: includes/class-pandawoo-quick-core.php:113
+msgid "Done"
+msgstr "Fertig"
+
+#: includes/class-pandawoo-quick-core.php:95
+msgid "Draft"
+msgstr "Entwurf"
+
+#: includes/class-pandawoo-quick-core.php:183
+msgid "Drafts"
+msgstr "Entwürfe"
+
+#: includes/class-pandawoo-quick-core.php:84
+msgid "Drag to change the image order"
+msgstr "Ziehen, um die Bildreihenfolge zu ändern"
+
+#: includes/class-pandawoo-quick-core.php:93
+msgid "Edit product"
+msgstr "Produkt bearbeiten"
+
+#: includes/class-pandawoo-quick-core.php:183
+msgid "Filter by status"
+msgstr "Nach Status filtern"
+
+#: includes/class-pandawoo-quick-core.php:340
+msgid "Hide these recommendations"
+msgstr "Diese Empfehlungen ausblenden"
+
+#: includes/class-pandawoo-quick-core.php:106
+msgid "In Safari, tap the square with the upward arrow. Depending on your Safari layout, it is at the top or bottom."
+msgstr "Tippen Sie in Safari auf das Quadrat mit dem Pfeil nach oben. Je nach Safari-Ansicht befindet es sich oben oder unten."
+
+#: includes/class-pandawoo-quick-core.php:100
+msgid "Install PandaWoo Quick on Android"
+msgstr "PandaWoo Quick auf Android installieren"
+
+#: includes/class-pandawoo-quick-core.php:101
+msgid "Install PandaWoo Quick on iPhone"
+msgstr "PandaWoo Quick auf dem iPhone installieren"
+
+#: includes/class-pandawoo-quick-core.php:182
+msgid "Install app"
+msgstr "App installieren"
+
+#: includes/class-pandawoo-quick-core.php:193
+msgid "JPEG, PNG or WebP; up to 12 photos."
+msgstr "JPEG, PNG oder WebP; bis zu 12 Fotos."
+
+#: includes/class-pandawoo-quick-core.php:103
+msgid "Keep these instructions open on the computer and follow the steps on your phone."
+msgstr "Lassen Sie diese Anleitung am Computer geöffnet und führen Sie die Schritte auf Ihrem Smartphone aus."
+
+#: includes/class-pandawoo-quick-core.php:183
+msgid "Load more"
+msgstr "Mehr laden"
+
+#: includes/class-pandawoo-quick-core.php:89
+msgid "Loading products…"
+msgstr "Produkte werden geladen …"
+
+#: includes/class-pandawoo-quick-core.php:110
+msgid "Make sure “Open as Web App” is enabled."
+msgstr "Achten Sie darauf, dass „Als Web-App öffnen“ eingeschaltet ist."
+
+#: includes/class-pandawoo-quick-updater.php:113
+msgid "Mobile-first WooCommerce product capture through a securely paired installable web app."
+msgstr "Mobile WooCommerce-Produkterfassung über eine sicher gekoppelte, installierbare Web-App."
+
+#: includes/class-pandawoo-quick-core.php:340
+msgid "More tools when your shop grows"
+msgstr "Mehr Werkzeuge, wenn Ihr Shop wächst"
+
+#: includes/class-pandawoo-quick-core.php:85
+msgid "Move image earlier"
+msgstr "Bild nach vorne verschieben"
+
+#: includes/class-pandawoo-quick-core.php:86
+msgid "Move image later"
+msgstr "Bild nach hinten verschieben"
+
+#: includes/class-pandawoo-quick-core.php:92 includes/class-pandawoo-quick-core.php:182 includes/class-pandawoo-quick-core.php:192
+msgid "New product"
+msgstr "Neues Produkt"
+
+#: includes/class-pandawoo-quick-core.php:346
+msgid "No account, tracking or paid extension is required to use PandaWoo Quick."
+msgstr "Für PandaWoo Quick sind weder Konto noch Tracking oder kostenpflichtige Erweiterung erforderlich."
+
+#: includes/class-pandawoo-quick-core.php:198
+msgid "No brand"
+msgstr "Keine Marke"
+
+#: includes/class-pandawoo-quick-core.php:293
+msgid "No connected device was found."
+msgstr "Es wurde kein verbundenes Gerät gefunden."
+
+#: includes/class-pandawoo-quick-core.php:506
+msgid "No connected shop session was found."
+msgstr "Es wurde keine verbundene Shop-Sitzung gefunden."
+
+#: includes/class-pandawoo-quick-core.php:123
+msgid "No matching products found."
+msgstr "Keine passenden Produkte gefunden."
+
+#: includes/class-pandawoo-quick-core.php:114
+msgid "Now open the PandaWoo Quick icon on your Home Screen."
+msgstr "Öffnen Sie jetzt das PandaWoo-Quick-Symbol auf Ihrem Home-Bildschirm."
+
+#: includes/class-pandawoo-quick-core.php:427
+msgid "Only JPEG, PNG and WebP images are allowed."
+msgstr "Es sind nur JPEG-, PNG- und WebP-Bilder erlaubt."
+
+#: includes/class-pandawoo-quick-core.php:105
+msgid "Open Share"
+msgstr "Teilen öffnen"
+
+#: includes/class-pandawoo-quick-core.php:109
+msgid "Open as Web App"
+msgstr "Als Web-App öffnen"
+
+#: includes/class-pandawoo-quick-core.php:117
+msgid "Open the app"
+msgstr "App öffnen"
+
+#: includes/class-pandawoo-quick-core.php:119
+msgid "Open the browser menu"
+msgstr "Browsermenü öffnen"
+
+#: includes/class-pandawoo-quick-core.php:120
+msgid "Open the browser menu on your phone and choose “Add to Home Screen” or “Install app”."
+msgstr "Öffnen Sie auf Ihrem Smartphone das Browsermenü und wählen Sie „Zum Home-Bildschirm hinzufügen“ oder „App installieren“."
+
+#: includes/class-pandawoo-quick-core.php:346
+msgid "Optional CRM, communication and automation features for businesses that need more than mobile product capture."
+msgstr "Optionale CRM-, Kommunikations- und Automatisierungsfunktionen für Unternehmen, die mehr als mobile Produkterfassung benötigen."
+
+#: includes/class-pandawoo-quick-core.php:340
+msgid "Optional extensions"
+msgstr "Optionale Erweiterungen"
+
+#: includes/class-pandawoo-quick-core.php:56 includes/class-pandawoo-quick-core.php:56
+msgid "PandaWoo Quick"
+msgstr "PandaWoo Quick"
+
+#: includes/class-pandawoo-quick-core.php:342
+msgid "PandaWoo Quick remains independent. Available ContactPanda integrations are enabled only when their required features are detected."
+msgstr "PandaWoo Quick bleibt unabhängig. Verfügbare ContactPanda-Integrationen werden nur aktiviert, wenn die benötigten Funktionen erkannt werden."
+
+#: includes/class-pandawoo-quick-core.php:167
+msgid "PandaWoo Quick requires WooCommerce."
+msgstr "PandaWoo Quick benötigt WooCommerce."
+
+#: includes/class-pandawoo-quick-core.php:346
+msgid "PandaWoo multi-shop"
+msgstr "PandaWoo Mehrshop"
+
+#: includes/class-pandawoo-quick-core.php:97
+msgid "Pending"
+msgstr "Ausstehend"
+
+#: includes/class-pandawoo-quick-core.php:305 includes/class-pandawoo-quick-core.php:313 includes/class-pandawoo-quick-core.php:350
+msgid "Permission denied."
+msgstr "Zugriff verweigert."
+
+#: includes/class-pandawoo-quick-core.php:99
+msgid "Phone connected successfully"
+msgstr "Smartphone erfolgreich verbunden"
+
+#: includes/class-pandawoo-quick-core.php:193
+msgid "Photos"
+msgstr "Fotos"
+
+#: includes/class-pandawoo-quick-core.php:91 includes/class-pandawoo-quick-core.php:473
+msgid "Please add at least one product photo."
+msgstr "Bitte fügen Sie mindestens ein Produktfoto hinzu."
+
+#: includes/class-pandawoo-quick-core.php:458
+msgid "Please choose a future publication time."
+msgstr "Bitte wählen Sie einen zukünftigen Veröffentlichungszeitpunkt."
+
+#: includes/class-pandawoo-quick-core.php:452
+msgid "Please complete all required product fields."
+msgstr "Bitte füllen Sie alle erforderlichen Produktfelder aus."
+
+#: includes/class-pandawoo-quick-core.php:194
+msgid "Please select"
+msgstr "Bitte auswählen"
+
+#: includes/class-pandawoo-quick-core.php:453
+msgid "Please select a valid brand."
+msgstr "Bitte wählen Sie eine gültige Marke."
+
+#: includes/class-pandawoo-quick-core.php:98
+msgid "Private"
+msgstr "Privat"
+
+#: includes/class-pandawoo-quick-core.php:194
+msgid "Product"
+msgstr "Produkt"
+
+#: includes/class-pandawoo-quick-core.php:121
+msgid "Product capture already works. Installing it on the Home Screen is a convenient shortcut."
+msgstr "Die Produkterfassung funktioniert bereits. Die Installation auf dem Home-Bildschirm ist eine praktische Abkürzung."
+
+#: includes/class-pandawoo-quick-core.php:194
+msgid "Product name"
+msgstr "Produktname"
+
+#: includes/class-pandawoo-quick-core.php:446
+msgid "Product not found or not editable."
+msgstr "Das Produkt wurde nicht gefunden oder kann nicht bearbeitet werden."
+
+#: includes/class-pandawoo-quick-core.php:407
+msgid "Product not found."
+msgstr "Produkt nicht gefunden."
+
+#: includes/class-pandawoo-quick-core.php:192
+msgid "Products"
+msgstr "Produkte"
+
+#: includes/class-pandawoo-quick-core.php:203
+msgid "Publication"
+msgstr "Veröffentlichung"
+
+#: includes/class-pandawoo-quick-core.php:203
+msgid "Publication date and time"
+msgstr "Datum und Uhrzeit der Veröffentlichung"
+
+#: includes/class-pandawoo-quick-core.php:203
+msgid "Publish now"
+msgstr "Jetzt veröffentlichen"
+
+#: includes/class-pandawoo-quick-core.php:94 includes/class-pandawoo-quick-core.php:183
+msgid "Published"
+msgstr "Veröffentlicht"
+
+#: includes/class-pandawoo-quick-core.php:124
+msgid "Really disconnect this shop from PandaWoo Quick?"
+msgstr "Diesen Shop wirklich von PandaWoo Quick trennen?"
+
+#: includes/class-pandawoo-quick-core.php:202
+msgid "Regular price"
+msgstr "Regulärer Preis"
+
+#: includes/class-pandawoo-quick-core.php:83
+msgid "Remove image"
+msgstr "Bild entfernen"
+
+#: includes/class-pandawoo-quick-core.php:203
+msgid "Save as draft"
+msgstr "Als Entwurf speichern"
+
+#: includes/class-pandawoo-quick-core.php:204
+msgid "Save product"
+msgstr "Produkt speichern"
+
+#: includes/class-pandawoo-quick-core.php:88
+msgid "Saving product…"
+msgstr "Produkt wird gespeichert …"
+
+#: includes/class-pandawoo-quick-core.php:176
+msgid "Scan this one-time code. It expires after ten minutes and does not contain your WordPress password."
+msgstr "Scannen Sie diesen einmaligen Code. Er läuft nach zehn Minuten ab und enthält nicht Ihr WordPress-Passwort."
+
+#: includes/class-pandawoo-quick-core.php:203
+msgid "Schedule"
+msgstr "Planen"
+
+#: includes/class-pandawoo-quick-core.php:96 includes/class-pandawoo-quick-core.php:183
+msgid "Scheduled"
+msgstr "Geplant"
+
+#: includes/class-pandawoo-quick-core.php:108
+msgid "Scroll through the list and tap “Add to Home Screen”."
+msgstr "Scrollen Sie durch die Liste und tippen Sie auf „Zum Home-Bildschirm hinzufügen“."
+
+#: includes/class-pandawoo-quick-core.php:194
+msgid "Search category"
+msgstr "Kategorie suchen"
+
+#: includes/class-pandawoo-quick-core.php:183
+msgid "Search products"
+msgstr "Produkte suchen"
+
+#: includes/class-pandawoo-quick-core.php:183
+msgid "Search products…"
+msgstr "Produkte suchen …"
+
+#: includes/class-pandawoo-quick-core.php:202
+msgid "Short description"
+msgstr "Kurzbeschreibung"
+
+#: includes/class-pandawoo-quick-core.php:104
+msgid "Smartphone"
+msgstr "Smartphone"
+
+#: includes/class-pandawoo-quick-core.php:193
+msgid "Take or select photos"
+msgstr "Fotos aufnehmen oder auswählen"
+
+#: includes/class-pandawoo-quick-core.php:112
+msgid "Tap “Add” in the top-right corner."
+msgstr "Tippen Sie oben rechts auf „Hinzufügen“."
+
+#: includes/class-pandawoo-quick-core.php:122
+msgid "The QR code has expired. Reload the page to create a new code."
+msgstr "Der QR-Code ist abgelaufen. Laden Sie die Seite neu, um einen neuen Code zu erzeugen."
+
+#: includes/class-pandawoo-quick-core.php:253
+msgid "The app session could not be verified."
+msgstr "Die App-Sitzung konnte nicht bestätigt werden."
+
+#: includes/class-pandawoo-quick-core.php:176
+msgid "The code can be used once."
+msgstr "Der Code kann einmal verwendet werden."
+
+#: includes/class-pandawoo-quick-core.php:495
+msgid "The product has been created."
+msgstr "Das Produkt wurde erstellt."
+
+#: includes/class-pandawoo-quick-core.php:495
+msgid "The product has been saved."
+msgstr "Das Produkt wurde gespeichert."
+
+#: includes/class-pandawoo-quick-core.php:90
+msgid "The server could not be reached. Please try again."
+msgstr "Der Server konnte nicht erreicht werden. Bitte versuchen Sie es erneut."
+
+#: includes/class-pandawoo-quick-core.php:511
+msgid "The shop has been disconnected. You can now pair this device with another shop."
+msgstr "Der Shop wurde getrennt. Sie können dieses Gerät jetzt mit einem anderen Shop koppeln."
+
+#: includes/class-pandawoo-quick-core.php:116
+msgid "The “Install app” button appears on your phone. Tap it and confirm the browser dialog."
+msgstr "Auf Ihrem Smartphone erscheint die Schaltfläche „App installieren“. Tippen Sie darauf und bestätigen Sie den Browserdialog."
+
+#: includes/class-pandawoo-quick-core.php:118
+msgid "Then open PandaWoo Quick using the new icon on your Home Screen."
+msgstr "Öffnen Sie PandaWoo Quick danach über das neue Symbol auf Ihrem Home-Bildschirm."
+
+#: includes/class-pandawoo-quick-core.php:266
+msgid "This pairing code has expired or has already been used."
+msgstr "Dieser Kopplungscode ist abgelaufen oder wurde bereits verwendet."
+
+#: includes/class-pandawoo-quick-core.php:362
+msgid "This phone is not connected. Scan a new QR code in WordPress."
+msgstr "Dieses Smartphone ist nicht verbunden. Scanne in WordPress einen neuen QR-Code."
+
+#: includes/class-pandawoo-quick-core.php:269
+msgid "This user may not use PandaWoo Quick."
+msgstr "Dieser Benutzer darf PandaWoo Quick nicht verwenden."
+
+#: includes/class-pandawoo-quick-updater.php:114
+msgid "Version %s"
+msgstr "Version %s"
+
+#: includes/class-pandawoo-quick-core.php:176
+msgid "Waiting for the phone…"
+msgstr "Warten auf das Smartphone …"
+
+#: includes/class-pandawoo-quick-core.php:484
+msgid "WooCommerce could not save the product."
+msgstr "WooCommerce konnte das Produkt nicht speichern."
+
+#: includes/class-pandawoo-quick-core.php:259
+msgid "WooCommerce is unavailable."
+msgstr "WooCommerce ist nicht verfügbar."
+
+#: includes/class-pandawoo-quick-core.php:258
+msgid "You do not have permission to edit products and upload photos."
+msgstr "Sie haben keine Berechtigung, Produkte zu bearbeiten und Fotos hochzuladen."
+
+#: includes/class-pandawoo-quick-core.php:166
+msgid "You do not have permission to use PandaWoo Quick."
+msgstr "Sie haben keine Berechtigung, PandaWoo Quick zu verwenden."

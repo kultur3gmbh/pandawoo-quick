@@ -21,6 +21,7 @@ final class PandaWoo_Quick_Core {
 	private static $active_device = array();
 
 	public static function boot() {
+		add_action( 'init', array( __CLASS__, 'load_textdomain' ), 1 );
 		add_action( 'admin_menu', array( __CLASS__, 'menu' ) );
 		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'admin_assets' ) );
 		add_action( 'template_redirect', array( __CLASS__, 'standalone_app' ), 0 );
@@ -37,6 +38,10 @@ final class PandaWoo_Quick_Core {
 			add_action( 'wp_ajax_nopriv_pandawoo_quick_' . $operation, array( __CLASS__, 'ajax_' . $operation ) );
 		}
 		add_action( 'wp_ajax_pandawoo_quick_pair_status', array( __CLASS__, 'ajax_pair_status' ) );
+	}
+
+	public static function load_textdomain() {
+		load_plugin_textdomain( 'pandawoo-quick', false, dirname( plugin_basename( PANDAWOO_QUICK_PATH . 'pandawoo-quick.php' ) ) . '/languages' );
 	}
 
 	private static function capability() {
@@ -86,6 +91,37 @@ final class PandaWoo_Quick_Core {
 				'photoRequired' => __( 'Please add at least one product photo.', 'pandawoo-quick' ),
 				'newProduct' => __( 'New product', 'pandawoo-quick' ),
 				'editProduct' => __( 'Edit product', 'pandawoo-quick' ),
+				'statusPublished' => __( 'Published', 'pandawoo-quick' ),
+				'statusDraft' => __( 'Draft', 'pandawoo-quick' ),
+				'statusScheduled' => __( 'Scheduled', 'pandawoo-quick' ),
+				'statusPending' => __( 'Pending', 'pandawoo-quick' ),
+				'statusPrivate' => __( 'Private', 'pandawoo-quick' ),
+				'phoneConnected' => __( 'Phone connected successfully', 'pandawoo-quick' ),
+				'installAndroidTitle' => __( 'Install PandaWoo Quick on Android', 'pandawoo-quick' ),
+				'installIosTitle' => __( 'Install PandaWoo Quick on iPhone', 'pandawoo-quick' ),
+				'installGenericTitle' => __( 'Add PandaWoo Quick to the Home Screen', 'pandawoo-quick' ),
+				'keepGuideOpen' => __( 'Keep these instructions open on the computer and follow the steps on your phone.', 'pandawoo-quick' ),
+				'smartphone' => __( 'Smartphone', 'pandawoo-quick' ),
+				'iosShareTitle' => __( 'Open Share', 'pandawoo-quick' ),
+				'iosShareText' => __( 'In Safari, tap the square with the upward arrow. Depending on your Safari layout, it is at the top or bottom.', 'pandawoo-quick' ),
+				'iosHomeTitle' => __( 'Add to Home Screen', 'pandawoo-quick' ),
+				'iosHomeText' => __( 'Scroll through the list and tap “Add to Home Screen”.', 'pandawoo-quick' ),
+				'iosWebAppTitle' => __( 'Open as Web App', 'pandawoo-quick' ),
+				'iosWebAppText' => __( 'Make sure “Open as Web App” is enabled.', 'pandawoo-quick' ),
+				'iosAddTitle' => __( 'Add', 'pandawoo-quick' ),
+				'iosAddText' => __( 'Tap “Add” in the top-right corner.', 'pandawoo-quick' ),
+				'finishedTitle' => __( 'Done', 'pandawoo-quick' ),
+				'iosFinishedText' => __( 'Now open the PandaWoo Quick icon on your Home Screen.', 'pandawoo-quick' ),
+				'androidInstallTitle' => __( 'Confirm installation', 'pandawoo-quick' ),
+				'androidInstallText' => __( 'The “Install app” button appears on your phone. Tap it and confirm the browser dialog.', 'pandawoo-quick' ),
+				'androidOpenTitle' => __( 'Open the app', 'pandawoo-quick' ),
+				'androidOpenText' => __( 'Then open PandaWoo Quick using the new icon on your Home Screen.', 'pandawoo-quick' ),
+				'genericMenuTitle' => __( 'Open the browser menu', 'pandawoo-quick' ),
+				'genericMenuText' => __( 'Open the browser menu on your phone and choose “Add to Home Screen” or “Install app”.', 'pandawoo-quick' ),
+				'installOptional' => __( 'Product capture already works. Installing it on the Home Screen is a convenient shortcut.', 'pandawoo-quick' ),
+				'pairExpired' => __( 'The QR code has expired. Reload the page to create a new code.', 'pandawoo-quick' ),
+				'noProducts' => __( 'No matching products found.', 'pandawoo-quick' ),
+				'confirmDisconnect' => __( 'Really disconnect this shop from PandaWoo Quick?', 'pandawoo-quick' ),
 			),
 		) );
 	}
@@ -107,6 +143,15 @@ final class PandaWoo_Quick_Core {
 
 	private static function app_url() {
 		return add_query_arg( self::APP_QUERY, '1', home_url( '/' ) );
+	}
+
+	private static function shop_logo_url() {
+		$custom_logo_id = absint( get_theme_mod( 'custom_logo' ) );
+		if ( $custom_logo_id ) {
+			$url = wp_get_attachment_image_url( $custom_logo_id, 'thumbnail' );
+			if ( $url ) return $url;
+		}
+		return get_site_icon_url( 96, PANDAWOO_QUICK_URL . 'assets/pandawoo-quick-icon-mark.svg' );
 	}
 
 	private static function pairing_session() {
@@ -134,7 +179,7 @@ final class PandaWoo_Quick_Core {
 			self::render_product_info();
 		}
 		$shop = self::shop_context();
-		echo '<div class="pwq-topbar"><div class="pwq-brand"><strong>PandaWoo Quick</strong><small class="pwq-active-shop">' . esc_html( $shop['name'] ?? $shop['url'] ) . '</small></div><div class="pwq-topbar-actions">' . ( self::$standalone ? '<button type="button" class="pwq-button pwq-install-app" hidden>' . esc_html__( 'Install app', 'pandawoo-quick' ) . '</button>' : '' ) . '<button type="button" class="pwq-button pwq-new">+ ' . esc_html__( 'New product', 'pandawoo-quick' ) . '</button>' . ( self::$standalone ? '<button type="button" class="pwq-disconnect">' . esc_html__( 'Disconnect shop', 'pandawoo-quick' ) . '</button>' : '' ) . '</div></div>';
+		echo '<div class="pwq-topbar"><div class="pwq-shop-identity"><img class="pwq-shop-logo" src="' . esc_url( self::shop_logo_url() ) . '" alt=""><div class="pwq-brand"><strong>PandaWoo Quick</strong><small class="pwq-active-shop">' . esc_html( $shop['name'] ?? $shop['url'] ) . '</small></div></div><div class="pwq-topbar-actions">' . ( self::$standalone ? '<button type="button" class="pwq-button pwq-install-app" hidden>' . esc_html__( 'Install app', 'pandawoo-quick' ) . '</button>' : '' ) . '<button type="button" class="pwq-button pwq-new">+ ' . esc_html__( 'New product', 'pandawoo-quick' ) . '</button>' . ( self::$standalone ? '<button type="button" class="pwq-disconnect">' . esc_html__( 'Disconnect shop', 'pandawoo-quick' ) . '</button>' : '' ) . '<img class="pwq-header-mascot" src="' . esc_url( PANDAWOO_QUICK_URL . 'assets/pandawoo-quick-header-96.png' ) . '" alt="PandaWoo Quick"></div></div>';
 		echo '<main class="pwq-main"><section class="pwq-list-view"><div class="pwq-list-tools"><label><span class="screen-reader-text">' . esc_html__( 'Search products', 'pandawoo-quick' ) . '</span><input class="pwq-product-search" type="search" placeholder="' . esc_attr__( 'Search products…', 'pandawoo-quick' ) . '"></label><select class="pwq-status-filter" aria-label="' . esc_attr__( 'Filter by status', 'pandawoo-quick' ) . '"><option value="">' . esc_html__( 'All statuses', 'pandawoo-quick' ) . '</option><option value="publish">' . esc_html__( 'Published', 'pandawoo-quick' ) . '</option><option value="draft">' . esc_html__( 'Drafts', 'pandawoo-quick' ) . '</option><option value="future">' . esc_html__( 'Scheduled', 'pandawoo-quick' ) . '</option></select></div><p class="pwq-list-message" aria-live="polite"></p><div class="pwq-product-list"></div><button type="button" class="pwq-button pwq-more" hidden>' . esc_html__( 'Load more', 'pandawoo-quick' ) . '</button></section>';
 		self::render_editor();
 		echo '</main></div>';
@@ -322,7 +367,7 @@ final class PandaWoo_Quick_Core {
 		wp_set_current_user( absint( $device['user_id'] ) );
 		self::enqueue_assets();
 		$manifest = add_query_arg( 'action', 'pandawoo_quick_manifest', admin_url( 'admin-post.php' ) );
-		echo '<!doctype html><html ' . get_language_attributes() . '><head><meta charset="' . esc_attr( get_bloginfo( 'charset' ) ) . '"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="' . esc_url( $manifest ) . '"><meta name="theme-color" content="#4053b6"><meta name="apple-mobile-web-app-capable" content="yes"><title>PandaWoo Quick</title>';
+		echo '<!doctype html><html ' . get_language_attributes() . '><head><meta charset="' . esc_attr( get_bloginfo( 'charset' ) ) . '"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><link rel="manifest" href="' . esc_url( $manifest ) . '"><link rel="apple-touch-icon" href="' . esc_url( PANDAWOO_QUICK_URL . 'assets/pandawoo-quick-app-icon-192.png' ) . '"><meta name="theme-color" content="#ffd300"><meta name="apple-mobile-web-app-capable" content="yes"><title>PandaWoo Quick</title>';
 		wp_head();
 		echo '</head><body class="pwq-body">';
 		self::render_shell( false );
@@ -468,10 +513,9 @@ final class PandaWoo_Quick_Core {
 
 	public static function manifest() {
 		if ( ! current_user_can( self::capability() ) && ! self::authenticated_device() ) { status_header( 403 ); exit; }
-		$icon = PANDAWOO_QUICK_URL . 'assets/icon.svg';
 		nocache_headers();
 		header( 'Content-Type: application/manifest+json; charset=utf-8' );
-		echo wp_json_encode( array( 'name' => 'PandaWoo Quick', 'short_name' => 'PandaWoo', 'start_url' => self::app_url(), 'scope' => home_url( '/' ), 'display' => 'standalone', 'background_color' => '#f4f6f8', 'theme_color' => '#4053b6', 'icons' => array( array( 'src' => $icon, 'sizes' => 'any', 'type' => 'image/svg+xml', 'purpose' => 'any maskable' ) ) ) );
+		echo wp_json_encode( array( 'name' => 'PandaWoo Quick', 'short_name' => 'PandaWoo', 'start_url' => self::app_url(), 'scope' => home_url( '/' ), 'display' => 'standalone', 'background_color' => '#fffdf7', 'theme_color' => '#ffd300', 'icons' => array( array( 'src' => PANDAWOO_QUICK_URL . 'assets/pandawoo-quick-app-icon-192.png', 'sizes' => '192x192', 'type' => 'image/png', 'purpose' => 'any maskable' ), array( 'src' => PANDAWOO_QUICK_URL . 'assets/pandawoo-quick-app-icon-512.png', 'sizes' => '512x512', 'type' => 'image/png', 'purpose' => 'any maskable' ) ) ) );
 		exit;
 	}
 

@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">PandaWoo Quick icon</title>
+  <desc id="desc">A friendly panda with a yellow shopping bag and a mobile product scanner.</desc>
+  <defs>
+    <filter id="soft-shadow" x="-20%" y="-20%" width="140%" height="150%">
+      <feDropShadow dx="0" dy="7" stdDeviation="7" flood-color="#111111" flood-opacity=".13"/>
+    </filter>
+  </defs>
+
+  <g stroke="#111111" stroke-width="12" stroke-linecap="round" stroke-linejoin="round" filter="url(#soft-shadow)">
+    <!-- Panda head -->
+    <circle cx="156" cy="102" r="55" fill="#111111"/>
+    <circle cx="342" cy="102" r="55" fill="#111111"/>
+    <path d="M82 245c0-112 71-176 174-176s174 64 174 176c0 97-70 157-174 157S82 342 82 245Z" fill="#ffffff"/>
+
+    <!-- Eye patches -->
+    <ellipse cx="174" cy="225" rx="53" ry="67" transform="rotate(18 174 225)" fill="#111111" stroke="none"/>
+    <ellipse cx="338" cy="225" rx="53" ry="67" transform="rotate(-18 338 225)" fill="#111111" stroke="none"/>
+    <path d="M152 226c10-18 31-18 42 0" fill="none" stroke="#ffffff" stroke-width="12"/>
+    <path d="M316 226c10-18 31-18 42 0" fill="none" stroke="#ffffff" stroke-width="12"/>
+
+    <!-- Face -->
+    <path d="M241 273c9-8 21-8 30 0-4 14-25 14-30 0Z" fill="#111111"/>
+    <path d="M256 288v12m0 0c-18 0-27-9-31-19m31 19c18 0 27-9 31-19" fill="none"/>
+    <path d="M231 318c13 27 39 27 51 0" fill="#ffffff"/>
+
+    <!-- Phone -->
+    <g transform="translate(54 300) rotate(-8 52 78)">
+      <rect x="0" y="0" width="104" height="156" rx="24" fill="#ffd300"/>
+      <circle cx="25" cy="26" r="10" fill="#111111" stroke="none"/>
+      <path d="M75 30v58" stroke="#ffffff" stroke-width="10"/>
+    </g>
+
+    <!-- Shopping bag -->
+    <g transform="translate(278 308)">
+      <path d="M20 62h178l18 151H0L20 62Z" fill="#ffd300"/>
+      <path d="M58 70C58 29 75 8 108 8s50 21 50 62" fill="none"/>
+      <path d="M33 86v77" stroke="#ffffff" stroke-width="10" opacity=".9"/>
+      <g transform="translate(145 88) rotate(8)">
+        <path d="M0 0h62l23 30-23 30H0Z" fill="#ffffff"/>
+        <circle cx="17" cy="30" r="6" fill="#ffd300" stroke="none"/>
+        <path d="M37 23h27M37 37h19" stroke-width="7"/>
+      </g>
+    </g>
+
+    <!-- Quick scan rays -->
+    <path d="M178 350l22-18M186 376l28-5" fill="none" stroke="#ffd300" stroke-width="14"/>
+  </g>
+</svg>

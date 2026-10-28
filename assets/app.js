@@ -69,7 +69,7 @@
 	}
 
 	function statusLabel(status) {
-		return { publish: 'Veröffentlicht', draft: 'Entwurf', future: 'Geplant', pending: 'Ausstehend', private: 'Privat' }[status] || status;
+		return { publish: config.i18n.statusPublished, draft: config.i18n.statusDraft, future: config.i18n.statusScheduled, pending: config.i18n.statusPending, private: config.i18n.statusPrivate }[status] || status;
 	}
 
 	function detectPlatform() {
@@ -96,20 +96,20 @@
 		if (!installGuide || !pairingPanel) return;
 		pairingPanel.hidden = true;
 		installGuide.hidden = false;
-		var html = '<div class="pwq-guide-head"><div><p class="pwq-kicker">Telefon erfolgreich verbunden</p><h2>' + (platform === 'android' ? 'PandaWoo Quick auf Android installieren' : platform === 'ios' ? 'PandaWoo Quick auf dem iPhone installieren' : 'PandaWoo Quick zum Home-Bildschirm hinzufügen') + '</h2><p>Lassen Sie diese Anleitung am Computer geöffnet und führen Sie die Schritte auf Ihrem Telefon aus.</p></div><span class="pwq-guide-device">' + (platform === 'android' ? 'Android' : platform === 'ios' ? 'iPhone / iPad' : 'Smartphone') + '</span></div><div class="pwq-guide-steps">';
+		var html = '<div class="pwq-guide-head"><div><p class="pwq-kicker">' + escapeHtml(config.i18n.phoneConnected) + '</p><h2>' + escapeHtml(platform === 'android' ? config.i18n.installAndroidTitle : platform === 'ios' ? config.i18n.installIosTitle : config.i18n.installGenericTitle) + '</h2><p>' + escapeHtml(config.i18n.keepGuideOpen) + '</p></div><span class="pwq-guide-device">' + escapeHtml(platform === 'android' ? 'Android' : platform === 'ios' ? 'iPhone / iPad' : config.i18n.smartphone) + '</span></div><div class="pwq-guide-steps">';
 		if (platform === 'ios') {
-			html += guideStep(1, 'guide-ios-share.svg', 'Teilen öffnen', 'Tippen Sie in Safari auf das Quadrat mit dem Pfeil nach oben. Es befindet sich je nach Safari-Ansicht oben oder unten.');
-			html += guideStep(2, 'guide-ios-home.svg', 'Zum Home-Bildschirm', 'Scrollen Sie in der Liste und tippen Sie auf „Zum Home-Bildschirm hinzufügen“.');
-			html += guideStep(3, 'guide-ios-webapp.svg', 'Als Web-App öffnen', 'Achten Sie darauf, dass „Als Web-App öffnen“ eingeschaltet ist.');
-			html += guideStep(4, 'guide-ios-add.svg', 'Hinzufügen', 'Tippen Sie oben rechts auf „Hinzufügen“.');
-			html += guideStep(5, 'guide-ios-finished.svg', 'Fertig', 'Öffnen Sie anschließend das PandaWoo-Quick-Symbol auf Ihrem Home-Bildschirm.');
+			html += guideStep(1, 'guide-ios-share.svg', config.i18n.iosShareTitle, config.i18n.iosShareText);
+			html += guideStep(2, 'guide-ios-home.svg', config.i18n.iosHomeTitle, config.i18n.iosHomeText);
+			html += guideStep(3, 'guide-ios-webapp.svg', config.i18n.iosWebAppTitle, config.i18n.iosWebAppText);
+			html += guideStep(4, 'guide-ios-add.svg', config.i18n.iosAddTitle, config.i18n.iosAddText);
+			html += guideStep(5, 'guide-ios-finished.svg', config.i18n.finishedTitle, config.i18n.iosFinishedText);
 		} else if (platform === 'android') {
-			html += guideStep(1, 'guide-android-install.svg', 'Installieren bestätigen', 'Auf dem Telefon erscheint die Schaltfläche „App installieren“. Tippen Sie darauf und bestätigen Sie den Browserdialog.');
-			html += guideStep(2, 'guide-android-finished.svg', 'App öffnen', 'Öffnen Sie danach PandaWoo Quick über das neue Symbol auf dem Startbildschirm.');
+			html += guideStep(1, 'guide-android-install.svg', config.i18n.androidInstallTitle, config.i18n.androidInstallText);
+			html += guideStep(2, 'guide-android-finished.svg', config.i18n.androidOpenTitle, config.i18n.androidOpenText);
 		} else {
-			html += guideStep(1, 'guide-generic.svg', 'Browsermenü öffnen', 'Öffnen Sie auf dem Telefon das Browsermenü und wählen Sie „Zum Home-Bildschirm hinzufügen“ oder „App installieren“.');
+			html += guideStep(1, 'guide-generic.svg', config.i18n.genericMenuTitle, config.i18n.genericMenuText);
 		}
-		installGuide.innerHTML = html + '</div><p class="pwq-guide-help">Die Produkterfassung funktioniert bereits. Die Installation auf dem Home-Bildschirm ist eine bequeme Abkürzung.</p>';
+		installGuide.innerHTML = html + '</div><p class="pwq-guide-help">' + escapeHtml(config.i18n.installOptional) + '</p>';
 		installGuide.scrollIntoView({ behavior: 'smooth', block: 'start' });
 	}
 
@@ -126,7 +126,7 @@
 				renderInstallGuide('unknown');
 			} else if (data.status === 'expired') {
 				clearInterval(pairPoll);
-				if (state) state.textContent = 'Der QR-Code ist abgelaufen. Laden Sie die Seite neu, um einen neuen Code zu erzeugen.';
+				if (state) state.textContent = config.i18n.pairExpired;
 			}
 		}).catch(function () {});
 	}
@@ -136,7 +136,7 @@
 		listMessage.textContent = config.i18n.loading;
 		request('list', { page: page, search: search.value.trim(), status: statusFilter.value }).then(function (data) {
 			pages = data.pages || 1;
-			if (!data.products.length && page === 1) list.innerHTML = '<div class="pwq-empty">Noch keine passenden Produkte gefunden.</div>';
+			if (!data.products.length && page === 1) list.innerHTML = '<div class="pwq-empty">' + escapeHtml(config.i18n.noProducts) + '</div>';
 			data.products.forEach(renderProductCard);
 			listMessage.textContent = '';
 			moreButton.hidden = page >= pages;
@@ -228,19 +228,27 @@
 		renderPhotos();
 	}
 
-	function movePhoto(from, to) {
-		if (from === to || from < 0 || to < 0 || from >= photos.length || to >= photos.length) return;
-		var moved = photos.splice(from, 1)[0];
-		photos.splice(to, 0, moved);
-		renderPhotos();
+	function capturePhotoRects() {
+		var rects = {};
+		Array.prototype.forEach.call(photoList.children, function (item) { rects[item.dataset.key] = item.getBoundingClientRect(); });
+		return rects;
 	}
 
-	function renderPhotos() {
+	function movePhoto(from, to) {
+		if (from === to || from < 0 || to < 0 || from >= photos.length || to >= photos.length) return;
+		var previousRects = capturePhotoRects();
+		var moved = photos.splice(from, 1)[0];
+		photos.splice(to, 0, moved);
+		renderPhotos(previousRects, moved.key);
+	}
+
+	function renderPhotos(previousRects, settledKey) {
 		photoList.innerHTML = '';
 		photos.forEach(function (photo, index) {
 			var item = document.createElement('article');
 			item.className = 'pwq-photo';
 			item.dataset.index = String(index);
+			item.dataset.key = photo.key;
 			item.innerHTML = '<img src="' + escapeHtml(photo.url) + '" alt="">' + (index === 0 ? '<span class="pwq-cover">' + escapeHtml(config.i18n.cover) + '</span>' : '') + '<button type="button" class="pwq-handle" aria-label="' + escapeHtml(config.i18n.move) + '"><span aria-hidden="true">⠿</span></button><div class="pwq-photo-actions"><button type="button" class="pwq-earlier" aria-label="' + escapeHtml(config.i18n.previous) + '">←</button><button type="button" class="pwq-later" aria-label="' + escapeHtml(config.i18n.next) + '">→</button><button type="button" class="pwq-remove" aria-label="' + escapeHtml(config.i18n.remove) + '">×</button></div>';
 			item.querySelector('.pwq-earlier').disabled = index === 0;
 			item.querySelector('.pwq-later').disabled = index === photos.length - 1;
@@ -254,6 +262,18 @@
 			bindPointerDrag(item, item.querySelector('.pwq-handle'), index);
 			photoList.appendChild(item);
 		});
+		if (previousRects && !(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)) {
+			Array.prototype.forEach.call(photoList.children, function (item) {
+				var previous = previousRects[item.dataset.key];
+				if (!previous) return;
+				var current = item.getBoundingClientRect();
+				var dx = previous.left - current.left;
+				var dy = previous.top - current.top;
+				if ((dx || dy) && item.animate) item.animate([{ transform: 'translate(' + dx + 'px,' + dy + 'px)' }, { transform: 'translate(0,0)' }], { duration: 220, easing: 'cubic-bezier(.2,.8,.2,1)' });
+			});
+			var settled = Array.prototype.find.call(photoList.children, function (item) { return item.dataset.key === settledKey; });
+			if (settled) { settled.classList.add('is-settling'); window.setTimeout(function () { settled.classList.remove('is-settling'); }, 240); }
+		}
 		photoSummary.textContent = photos.length ? config.i18n.photos.replace('%d', photos.length) : '';
 	}
 
@@ -262,12 +282,16 @@
 			if (event.button !== undefined && event.button !== 0) return;
 			event.preventDefault();
 			handle.setPointerCapture(event.pointerId);
-			drag = { pointerId: event.pointerId, from: index, over: index, item: item };
+			drag = { pointerId: event.pointerId, from: index, over: index, item: item, startX: event.clientX, startY: event.clientY };
 			item.classList.add('is-dragging');
+			item.style.pointerEvents = 'none';
 		});
 		handle.addEventListener('pointermove', function (event) {
 			if (!drag || drag.pointerId !== event.pointerId) return;
 			event.preventDefault();
+			var dx = event.clientX - drag.startX;
+			var dy = event.clientY - drag.startY;
+			drag.item.style.transform = 'translate(' + dx + 'px,' + dy + 'px) scale(1.045) rotate(' + Math.max(-2, Math.min(2, dx / 80)) + 'deg)';
 			var target = document.elementFromPoint(event.clientX, event.clientY);
 			var over = target && target.closest('.pwq-photo');
 			if (over && photoList.contains(over)) {
@@ -283,7 +307,11 @@
 			var from = drag.from;
 			var to = drag.over;
 			drag.item.classList.remove('is-dragging');
+			drag.item.style.pointerEvents = '';
+			drag.item.style.transform = '';
+			Array.prototype.forEach.call(photoList.children, function (child) { child.classList.remove('is-drop-target'); });
 			drag = null;
+			if (from !== to && navigator.vibrate) navigator.vibrate(12);
 			movePhoto(from, to);
 		}
 		handle.addEventListener('pointerup', finish);
@@ -331,7 +359,7 @@
 	newButton.addEventListener('click', openNew);
 	if (disconnectButton) {
 		disconnectButton.addEventListener('click', function () {
-			if (!window.confirm('Diesen Shop wirklich von PandaWoo Quick trennen?')) return;
+			if (!window.confirm(config.i18n.confirmDisconnect)) return;
 			disconnectButton.disabled = true;
 			request('disconnect', {}).then(function (data) {
 				window.alert(data.message);

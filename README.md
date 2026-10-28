@@ -13,6 +13,9 @@ PandaWoo Quick Free is a mobile-first WooCommerce product capture plugin. A phon
 - Immediate publishing, scheduled publishing and drafts
 - Illustrated Apple and Android installation guidance
 - Public, token-free GitHub release updates through WordPress
+- English source language plus German, German formal and German (Switzerland) translations
+- Official PandaWoo Quick mascot, connected-shop logo and refined typography
+- Animated, touch-friendly image reordering with reduced-motion support
 
 PandaWoo Quick works without ContactPanda, an external account or a paid extension. It does not send product data to an external service.
 
@@ -43,6 +46,16 @@ No GitHub token or ContactPanda component is required. Successful checks are cac
 - Connected devices can be revoked from WordPress or disconnected in the app.
 - Product and media data remain native WooCommerce and WordPress records.
 - No analytics, tracking or external account is required.
+
+## Translations
+
+English is the source language. The repository ships a gettext POT template plus PO and compiled MO catalogs for:
+
+- German (`de_DE`)
+- German formal (`de_DE_formal`)
+- German (Switzerland) (`de_CH`)
+
+Run `python3 tools/make_i18n.py` after changing user-facing strings, then compile the PO catalogs before building a release.
 
 ## License
 
