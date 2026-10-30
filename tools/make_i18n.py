@@ -13,10 +13,20 @@ DE = {
 }
 
 DE.update({
+	"Availability": "Verfügbarkeit",
+	"Available": "Verfügbar",
+	"Delete product": "Produkt löschen",
+	"Deleting product…": "Produkt wird gelöscht …",
+	"Do you really want to delete the product “%s”? This cannot be undone.": "Möchtest du das Produkt „%s“ wirklich löschen? Das ist nicht rückgängig zu machen.",
+	"Manage stock quantity": "Lagerbestand verwalten",
+	"Not available": "Nicht verfügbar",
     "Preparing photos…": "Fotos werden vorbereitet …",
+	"Stock quantity": "Lagerbestand",
     "Technical error log": "Technisches Fehlerprotokoll",
+	"The product has been deleted.": "Das Produkt wurde gelöscht.",
     "Recent errors detected by PandaWoo Quick. No product or customer data is stored here.": "Zuletzt von PandaWoo Quick erkannte Fehler. Hier werden keine Produkt- oder Kundendaten gespeichert.",
     "The server returned an unreadable response. Please try again. If this happens again, check the technical error log in PandaWoo Quick.": "Der Server hat eine nicht lesbare Antwort gesendet. Bitte versuche es erneut. Falls das wieder passiert, prüfe das technische Fehlerprotokoll in PandaWoo Quick.",
+	"WooCommerce could not delete the product.": "WooCommerce konnte das Produkt nicht löschen.",
 })
 
 FORMAL_OVERRIDES = {
@@ -24,6 +34,7 @@ FORMAL_OVERRIDES = {
 }
 
 FORMAL_OVERRIDES.update({
+	"Do you really want to delete the product “%s”? This cannot be undone.": "Möchten Sie das Produkt „%s“ wirklich löschen? Das ist nicht rückgängig zu machen.",
     "The server returned an unreadable response. Please try again. If this happens again, check the technical error log in PandaWoo Quick.": "Der Server hat eine nicht lesbare Antwort gesendet. Bitte versuchen Sie es erneut. Falls das wieder passiert, prüfen Sie das technische Fehlerprotokoll in PandaWoo Quick.",
 })
 
@@ -32,7 +43,7 @@ def quote(value):
 
 def header(locale=None):
     lang = locale or ""
-    return ["msgid \"\"", "msgstr \"\"", '"Project-Id-Version: PandaWoo Quick 0.2.7\\n"', '"Report-Msgid-Bugs-To: https://github.com/kultur3gmbh/pandawoo-quick/issues\\n"', f'"POT-Creation-Date: {datetime.date.today().isoformat()} 00:00+0000\\n"', f'"PO-Revision-Date: {datetime.date.today().isoformat()} 00:00+0000\\n"', '"Last-Translator: Kultur³ GmbH\\n"', '"Language-Team: ContactPanda\\n"', f'"Language: {lang}\\n"', '"MIME-Version: 1.0\\n"', '"Content-Type: text/plain; charset=UTF-8\\n"', '"Content-Transfer-Encoding: 8bit\\n"', '"Plural-Forms: nplurals=2; plural=(n != 1);\\n"', '"X-Domain: pandawoo-quick\\n"', ""]
+    return ["msgid \"\"", "msgstr \"\"", '"Project-Id-Version: PandaWoo Quick 0.2.8\\n"', '"Report-Msgid-Bugs-To: https://github.com/kultur3gmbh/pandawoo-quick/issues\\n"', f'"POT-Creation-Date: {datetime.date.today().isoformat()} 00:00+0000\\n"', f'"PO-Revision-Date: {datetime.date.today().isoformat()} 00:00+0000\\n"', '"Last-Translator: Kultur³ GmbH\\n"', '"Language-Team: ContactPanda\\n"', f'"Language: {lang}\\n"', '"MIME-Version: 1.0\\n"', '"Content-Type: text/plain; charset=UTF-8\\n"', '"Content-Transfer-Encoding: 8bit\\n"', '"Plural-Forms: nplurals=2; plural=(n != 1);\\n"', '"X-Domain: pandawoo-quick\\n"', ""]
 
 refs = {}
 for path in sorted(ROOT.rglob("*.php")):

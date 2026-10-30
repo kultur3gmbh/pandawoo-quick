@@ -5,7 +5,7 @@ php_file="$root/includes/class-pandawoo-quick-core.php"
 updater_file="$root/includes/class-pandawoo-quick-updater.php"
 js_file="$root/assets/app.js"
 
-for needle in "new WC_Product_Simple" "wc_get_products" "pandawoo_quick_pair_" "secret_hash" "shop_id" "maxShops" "ajax_disconnect" "contactpanda_available" "dismiss_product_info" "taxonomy_choices" "product_brand" "ajax_pair_status" "ajax_report_device" "beforeinstallprompt" "pwq-install-fallback" "genericMenuText" "guide-ios-share.svg" "pointerdown" "font-size:16px" "preparePhoto" "response.text" "ERROR_LOG_OPTION" "pwq-schedule\[hidden\]" "pre_set_site_transient_update_plugins" "plugins_api" "pandawoo-quick-' . \$version . '.zip" "api.github.com/repos"; do
+for needle in "new WC_Product_Simple" "wc_get_products" "pandawoo_quick_pair_" "secret_hash" "shop_id" "maxShops" "ajax_disconnect" "ajax_delete" "set_manage_stock" "pwq-stock-mode" "confirmDelete" "array_map( 'absint'" "contactpanda_available" "dismiss_product_info" "taxonomy_choices" "product_brand" "ajax_pair_status" "ajax_report_device" "beforeinstallprompt" "pwq-install-fallback" "genericMenuText" "guide-ios-share.svg" "pointerdown" "font-size:16px" "preparePhoto" "response.text" "ERROR_LOG_OPTION" "pwq-schedule\[hidden\]" "pre_set_site_transient_update_plugins" "plugins_api" "pandawoo-quick-' . \$version . '.zip" "api.github.com/repos"; do
 	if ! grep -q "$needle" "$php_file" "$updater_file" "$js_file" "$root/assets/app.css"; then
 		echo "Missing required implementation marker: $needle" >&2
 		exit 1
@@ -43,8 +43,8 @@ if grep -Eq '[ÄÖÜäöüß]|Home-Bildschirm|Diesen Shop|Veröffentlicht' "$js_
 	exit 1
 fi
 
-if ! grep -q "Version: 0.2.7" "$root/pandawoo-quick.php" || ! grep -q "PANDAWOO_QUICK_VERSION', '0.2.7'" "$root/pandawoo-quick.php" || ! grep -q "Stable tag: 0.2.7" "$root/readme.txt"; then
-	echo "Version metadata is not synchronized at 0.2.7." >&2
+if ! grep -q "Version: 0.2.8" "$root/pandawoo-quick.php" || ! grep -q "PANDAWOO_QUICK_VERSION', '0.2.8'" "$root/pandawoo-quick.php" || ! grep -q "Stable tag: 0.2.8" "$root/readme.txt"; then
+	echo "Version metadata is not synchronized at 0.2.8." >&2
 	exit 1
 fi
 

@@ -34,7 +34,7 @@ final class PandaWoo_Quick_Core {
 		add_action( 'admin_post_nopriv_pandawoo_quick_manifest', array( __CLASS__, 'manifest' ) );
 		add_action( 'admin_post_pandawoo_quick_service_worker', array( __CLASS__, 'service_worker' ) );
 		add_action( 'admin_post_nopriv_pandawoo_quick_service_worker', array( __CLASS__, 'service_worker' ) );
-		foreach ( array( 'list', 'get', 'save', 'disconnect', 'report_device', 'client_error' ) as $operation ) {
+		foreach ( array( 'list', 'get', 'save', 'delete', 'disconnect', 'report_device', 'client_error' ) as $operation ) {
 			add_action( 'wp_ajax_pandawoo_quick_' . $operation, array( __CLASS__, 'ajax_' . $operation ) );
 			add_action( 'wp_ajax_nopriv_pandawoo_quick_' . $operation, array( __CLASS__, 'ajax_' . $operation ) );
 		}
@@ -125,6 +125,8 @@ final class PandaWoo_Quick_Core {
 				'pairExpired' => __( 'The QR code has expired. Reload the page to create a new code.', 'pandawoo-quick' ),
 				'noProducts' => __( 'No matching products found.', 'pandawoo-quick' ),
 				'confirmDisconnect' => __( 'Really disconnect this shop from PandaWoo Quick?', 'pandawoo-quick' ),
+				'confirmDelete' => __( 'Do you really want to delete the product “%s”? This cannot be undone.', 'pandawoo-quick' ),
+				'deleting' => __( 'Deleting product…', 'pandawoo-quick' ),
 			),
 		) );
 	}
@@ -204,9 +206,9 @@ final class PandaWoo_Quick_Core {
 			foreach ( $brands as $brand ) echo '<option value="' . esc_attr( $brand['id'] ) . '">' . esc_html( $brand['label'] ) . '</option>';
 			echo '</select></label>';
 		}
-		echo '<label><span>' . esc_html__( 'Regular price', 'pandawoo-quick' ) . '</span><div class="pwq-price"><input name="regular_price" type="number" min="0" step="0.01" inputmode="decimal" required><b>' . esc_html( get_woocommerce_currency_symbol() ) . '</b></div></label><label class="wide"><span>' . esc_html__( 'Short description', 'pandawoo-quick' ) . '</span><textarea name="short_description" rows="3"></textarea></label><label class="wide"><span>' . esc_html__( 'Detailed description', 'pandawoo-quick' ) . '</span><textarea name="description" rows="7"></textarea></label></div></section>';
+		echo '<label><span>' . esc_html__( 'Regular price', 'pandawoo-quick' ) . '</span><div class="pwq-price"><input name="regular_price" type="number" min="0" step="0.01" inputmode="decimal" required><b>' . esc_html( get_woocommerce_currency_symbol() ) . '</b></div></label><label><span>' . esc_html__( 'Availability', 'pandawoo-quick' ) . '</span><select class="pwq-stock-mode" name="stock_mode"><option value="instock">' . esc_html__( 'Available', 'pandawoo-quick' ) . '</option><option value="outofstock">' . esc_html__( 'Not available', 'pandawoo-quick' ) . '</option><option value="managed">' . esc_html__( 'Manage stock quantity', 'pandawoo-quick' ) . '</option></select></label><label class="pwq-stock-quantity" hidden><span>' . esc_html__( 'Stock quantity', 'pandawoo-quick' ) . '</span><input name="stock_quantity" type="number" min="0" step="1" inputmode="numeric" value="0"></label><label class="wide"><span>' . esc_html__( 'Short description', 'pandawoo-quick' ) . '</span><textarea name="short_description" rows="3"></textarea></label><label class="wide"><span>' . esc_html__( 'Detailed description', 'pandawoo-quick' ) . '</span><textarea name="description" rows="7"></textarea></label></div></section>';
 		echo '<section class="pwq-card"><h2>3. ' . esc_html__( 'Publication', 'pandawoo-quick' ) . '</h2><div class="pwq-modes"><label><input type="radio" name="publish_mode" value="publish" checked><strong>' . esc_html__( 'Publish now', 'pandawoo-quick' ) . '</strong></label><label><input type="radio" name="publish_mode" value="future"><strong>' . esc_html__( 'Schedule', 'pandawoo-quick' ) . '</strong></label><label><input type="radio" name="publish_mode" value="draft"><strong>' . esc_html__( 'Save as draft', 'pandawoo-quick' ) . '</strong></label></div><label class="pwq-schedule" hidden><span>' . esc_html__( 'Publication date and time', 'pandawoo-quick' ) . '</span><input type="datetime-local" name="publish_at" min="' . esc_attr( $min ) . '"></label></section>';
-		echo '<div class="pwq-submit"><button class="pwq-button primary" type="submit">' . esc_html__( 'Save product', 'pandawoo-quick' ) . '</button><p class="pwq-message" aria-live="polite"></p></div></form></section>';
+		echo '<div class="pwq-submit"><div class="pwq-submit-actions"><button class="pwq-button primary" type="submit">' . esc_html__( 'Save product', 'pandawoo-quick' ) . '</button><button class="pwq-button danger pwq-delete-product" type="button" hidden>' . esc_html__( 'Delete product', 'pandawoo-quick' ) . '</button></div><p class="pwq-message" aria-live="polite"></p></div></form></section>';
 	}
 
 	private static function taxonomy_choices( $taxonomy ) {
@@ -403,14 +405,18 @@ final class PandaWoo_Quick_Core {
 	}
 
 	private static function product_data( $product ) {
-		$image_ids = array_values( array_filter( array_merge( array( $product->get_image_id() ), $product->get_gallery_image_ids() ) ) );
+		$image_ids = array_values( array_unique( array_filter( array_map( 'absint', array_merge( array( $product->get_image_id() ), $product->get_gallery_image_ids() ) ) ) ) );
 		$images = array();
-		foreach ( $image_ids as $id ) $images[] = array( 'id' => absint( $id ), 'url' => wp_get_attachment_image_url( $id, 'medium' ) ?: wp_get_attachment_url( $id ) );
+		foreach ( $image_ids as $id ) {
+			$url = wp_get_attachment_image_url( $id, 'medium' ) ?: wp_get_attachment_url( $id );
+			if ( 'attachment' === get_post_type( $id ) && wp_attachment_is_image( $id ) && $url ) $images[] = array( 'id' => $id, 'url' => $url );
+		}
 		$status = $product->get_status();
 		$publish_at = 'future' === $status ? mysql2date( 'Y-m-d\TH:i', get_post_field( 'post_date', $product->get_id() ), false ) : '';
 		$brand_ids = taxonomy_exists( 'product_brand' ) ? wp_get_object_terms( $product->get_id(), 'product_brand', array( 'fields' => 'ids' ) ) : array();
 		if ( is_wp_error( $brand_ids ) ) $brand_ids = array();
-		return array( 'id' => $product->get_id(), 'name' => $product->get_name(), 'price' => $product->get_regular_price(), 'shortDescription' => $product->get_short_description(), 'description' => $product->get_description(), 'categoryId' => (string) ( $product->get_category_ids()[0] ?? '' ), 'brandId' => (string) ( $brand_ids[0] ?? '' ), 'status' => $status, 'publishAt' => $publish_at, 'images' => $images, 'editUrl' => get_edit_post_link( $product->get_id(), 'raw' ) );
+		$stock_mode = $product->get_manage_stock() ? 'managed' : ( 'outofstock' === $product->get_stock_status() ? 'outofstock' : 'instock' );
+		return array( 'id' => $product->get_id(), 'name' => $product->get_name(), 'price' => $product->get_regular_price(), 'shortDescription' => $product->get_short_description(), 'description' => $product->get_description(), 'categoryId' => (string) ( $product->get_category_ids()[0] ?? '' ), 'brandId' => (string) ( $brand_ids[0] ?? '' ), 'stockMode' => $stock_mode, 'stockQuantity' => max( 0, (int) $product->get_stock_quantity() ), 'status' => $status, 'publishAt' => $publish_at, 'images' => $images, 'editUrl' => get_edit_post_link( $product->get_id(), 'raw' ) );
 	}
 
 	public static function ajax_list() {
@@ -474,9 +480,12 @@ final class PandaWoo_Quick_Core {
 		$price = wc_format_decimal( wp_unslash( $_POST['regular_price'] ?? '' ) );
 		$category = absint( $_POST['category_id'] ?? 0 );
 		$brand = taxonomy_exists( 'product_brand' ) ? absint( $_POST['brand_id'] ?? 0 ) : 0;
+		$stock_mode = sanitize_key( $_POST['stock_mode'] ?? 'instock' );
+		$stock_quantity = max( 0, absint( $_POST['stock_quantity'] ?? 0 ) );
 		$mode = sanitize_key( $_POST['publish_mode'] ?? 'draft' );
 		if ( ! $name || '' === $price || ! is_numeric( $price ) || (float) $price < 0 || ! term_exists( $category, 'product_cat' ) ) wp_send_json_error( array( 'message' => __( 'Please complete all required product fields.', 'pandawoo-quick' ) ), 422 );
 		if ( $brand && ! term_exists( $brand, 'product_brand' ) ) wp_send_json_error( array( 'message' => __( 'Please select a valid brand.', 'pandawoo-quick' ) ), 422 );
+		if ( ! in_array( $stock_mode, array( 'instock', 'outofstock', 'managed' ), true ) ) $stock_mode = 'instock';
 		if ( ! in_array( $mode, array( 'publish', 'future', 'draft' ), true ) ) $mode = 'draft';
 		$scheduled_date = null;
 		if ( 'future' === $mode ) {
@@ -484,8 +493,13 @@ final class PandaWoo_Quick_Core {
 			if ( ! $scheduled_date || $scheduled_date->getTimestamp() <= time() + 60 ) wp_send_json_error( array( 'message' => __( 'Please choose a future publication time.', 'pandawoo-quick' ) ), 422 );
 		}
 		$existing_ids = array_values( array_filter( array_map( 'absint', (array) ( $_POST['existing_images'] ?? array() ) ) ) );
-		$allowed_existing = $id ? array_values( array_filter( array_merge( array( $product->get_image_id() ), $product->get_gallery_image_ids() ) ) ) : array();
-		foreach ( $existing_ids as $attachment_id ) if ( ! in_array( $attachment_id, $allowed_existing, true ) || 'attachment' !== get_post_type( $attachment_id ) || ! wp_attachment_is_image( $attachment_id ) ) wp_send_json_error( array( 'message' => __( 'An image selection is invalid.', 'pandawoo-quick' ) ), 422 );
+		$allowed_existing = $id ? array_values( array_unique( array_filter( array_map( 'absint', array_merge( array( $product->get_image_id() ), $product->get_gallery_image_ids() ) ) ) ) ) : array();
+		foreach ( $existing_ids as $attachment_id ) {
+			if ( ! in_array( $attachment_id, $allowed_existing, true ) || 'attachment' !== get_post_type( $attachment_id ) || ! wp_attachment_is_image( $attachment_id ) ) {
+				self::record_error( 'image_validation', 'Product ' . $id . ' / image ' . $attachment_id );
+				wp_send_json_error( array( 'message' => __( 'An image selection is invalid.', 'pandawoo-quick' ) ), 422 );
+			}
+		}
 		$uploaded = array();
 		try {
 			$new_files = self::request_files();
@@ -507,6 +521,13 @@ final class PandaWoo_Quick_Core {
 			$product->set_short_description( wp_kses_post( wp_unslash( $_POST['short_description'] ?? '' ) ) );
 			$product->set_description( wp_kses_post( wp_unslash( $_POST['description'] ?? '' ) ) );
 			$product->set_category_ids( array( $category ) );
+			$product->set_manage_stock( 'managed' === $stock_mode );
+			if ( 'managed' === $stock_mode ) {
+				$product->set_stock_quantity( $stock_quantity );
+				$product->set_stock_status( $stock_quantity > 0 ? 'instock' : 'outofstock' );
+			} else {
+				$product->set_stock_status( $stock_mode );
+			}
 			$product->set_image_id( array_shift( $images ) );
 			$product->set_gallery_image_ids( $images );
 			$product->set_status( 'publish' === $mode ? 'publish' : 'draft' );
@@ -527,6 +548,21 @@ final class PandaWoo_Quick_Core {
 			if ( $is_new && $id ) wp_delete_post( $id, true );
 			self::delete_attachments( $uploaded );
 			self::record_error( 'save', $error->getMessage() );
+			wp_send_json_error( array( 'message' => $error->getMessage() ), 422 );
+		}
+	}
+
+	public static function ajax_delete() {
+		self::require_access();
+		$id = absint( $_POST['product_id'] ?? 0 );
+		$product = wc_get_product( $id );
+		if ( ! $product || ! is_a( $product, 'WC_Product_Simple' ) || ! current_user_can( 'delete_post', $id ) ) wp_send_json_error( array( 'message' => __( 'Product not found or not editable.', 'pandawoo-quick' ) ), 404 );
+		try {
+			$deleted = $product->delete( true );
+			if ( ! $deleted || wc_get_product( $id ) ) throw new RuntimeException( __( 'WooCommerce could not delete the product.', 'pandawoo-quick' ) );
+			wp_send_json_success( array( 'message' => __( 'The product has been deleted.', 'pandawoo-quick' ) ) );
+		} catch ( Throwable $error ) {
+			self::record_error( 'delete', $error->getMessage() );
 			wp_send_json_error( array( 'message' => $error->getMessage() ), 422 );
 		}
 	}

@@ -27,9 +27,13 @@
 	var categorySearch = root.querySelector('.pwq-category-search');
 	var categorySelect = root.querySelector('.pwq-category');
 	var brandSelect = root.querySelector('.pwq-brand');
+	var stockMode = root.querySelector('.pwq-stock-mode');
+	var stockQuantity = root.querySelector('.pwq-stock-quantity');
+	var stockQuantityInput = stockQuantity.querySelector('input');
 	var schedule = root.querySelector('.pwq-schedule');
 	var scheduleInput = schedule.querySelector('input');
 	var message = root.querySelector('.pwq-message');
+	var deleteButton = root.querySelector('.pwq-delete-product');
 	var qr = root.querySelector('.pwq-qr');
 	var page = 1;
 	var pages = 1;
@@ -194,6 +198,11 @@
 		editorTitle.textContent = config.i18n.newProduct;
 		schedule.hidden = true;
 		scheduleInput.required = false;
+		stockMode.value = 'instock';
+		stockQuantity.hidden = true;
+		stockQuantityInput.required = false;
+		stockQuantityInput.value = '0';
+		deleteButton.hidden = true;
 		message.textContent = '';
 		categorySearch.value = '';
 		filterCategories();
@@ -217,6 +226,9 @@
 			form.elements.regular_price.value = product.price;
 			form.elements.short_description.value = product.shortDescription;
 			form.elements.description.value = product.description;
+			stockMode.value = product.stockMode || 'instock';
+			stockQuantityInput.value = String(product.stockQuantity || 0);
+			toggleStockQuantity();
 			categorySelect.value = product.categoryId;
 			if (brandSelect) brandSelect.value = product.brandId || '';
 			var mode = form.querySelector('[name="publish_mode"][value="' + product.status + '"]') || form.querySelector('[name="publish_mode"][value="draft"]');
@@ -225,6 +237,7 @@
 			scheduleInput.required = product.status === 'future';
 			scheduleInput.value = product.publishAt || '';
 			photos = product.images.map(function (image) { return { key: 'existing:' + image.id, id: image.id, url: image.url, isNew: false }; });
+			deleteButton.hidden = false;
 			editorTitle.textContent = config.i18n.editProduct;
 			message.textContent = '';
 			renderPhotos();
@@ -385,6 +398,27 @@
 		if (Array.prototype.some.call(categorySelect.options, function (option) { return option.value === selected; })) categorySelect.value = selected;
 	}
 
+	function toggleStockQuantity() {
+		var managed = stockMode.value === 'managed';
+		stockQuantity.hidden = !managed;
+		stockQuantityInput.required = managed;
+	}
+
+	function deleteProduct() {
+		var id = Number(form.elements.product_id.value || 0);
+		var name = form.elements.product_name.value.trim();
+		if (!id || !window.confirm(config.i18n.confirmDelete.replace('%s', name))) return;
+		deleteButton.disabled = true;
+		message.textContent = config.i18n.deleting;
+		request('delete', { product_id: id }).then(function (data) {
+			message.textContent = data.message;
+			setTimeout(function () { releasePhotos(); showEditor(false); loadProducts(true); }, 500);
+		}).catch(function (error) {
+			message.textContent = error.message;
+			deleteButton.disabled = false;
+		});
+	}
+
 	function submitForm(event) {
 		event.preventDefault();
 		if (!form.reportValidity()) return;
@@ -457,6 +491,8 @@
 	backButton.addEventListener('click', function () { releasePhotos(); showEditor(false); });
 	imageInput.addEventListener('change', function () { addFiles(imageInput.files); });
 	categorySearch.addEventListener('input', filterCategories);
+	stockMode.addEventListener('change', toggleStockQuantity);
+	deleteButton.addEventListener('click', deleteProduct);
 	form.addEventListener('submit', submitForm);
 	Array.prototype.forEach.call(form.elements.publish_mode, function (radio) {
 		radio.addEventListener('change', function () { var active = radio.checked && radio.value === 'future'; schedule.hidden = !active; scheduleInput.required = active; });
