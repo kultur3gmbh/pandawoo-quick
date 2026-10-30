@@ -56,11 +56,28 @@
 		body.append('nonce', config.nonce || '');
 		body.append('device_nonce', config.deviceNonce || '');
 		return fetch(config.ajaxUrl, { method: 'POST', body: body, credentials: 'same-origin' }).then(function (response) {
-			return response.json().then(function (json) {
+			return response.text().then(function (text) {
+				var json;
+				try {
+					json = JSON.parse(text);
+				} catch (error) {
+					reportClientError(action, response.status);
+					throw new Error(config.i18n.invalidResponse || config.i18n.network);
+				}
 				if (!response.ok || !json.success) throw new Error((json.data && json.data.message) || config.i18n.network);
 				return json.data;
 			});
 		});
+	}
+
+	function reportClientError(action, status) {
+		var body = new URLSearchParams();
+		body.append('action', 'pandawoo_quick_client_error');
+		body.append('nonce', config.nonce || '');
+		body.append('device_nonce', config.deviceNonce || '');
+		body.append('operation', action || 'unknown');
+		body.append('status', String(status || 0));
+		fetch(config.ajaxUrl, { method: 'POST', body: body, credentials: 'same-origin', keepalive: true }).catch(function () {});
 	}
 
 	function escapeHtml(value) {
@@ -216,6 +233,40 @@
 
 	function stableFileKey(file) { return [file.name, file.size, file.lastModified].join(':'); }
 
+	function resizedName(name, mime) {
+		var stem = String(name || 'product-photo').replace(/\.[^.]+$/, '');
+		return stem + (mime === 'image/png' ? '.png' : '.jpg');
+	}
+
+	function preparePhoto(file) {
+		var maximumEdge = 2048;
+		var quality = 0.84;
+		return new Promise(function (resolve) {
+			var url = URL.createObjectURL(file);
+			var image = new Image();
+			image.onload = function () {
+				URL.revokeObjectURL(url);
+				var width = image.naturalWidth || image.width;
+				var height = image.naturalHeight || image.height;
+				if (!width || !height || Math.max(width, height) <= maximumEdge) { resolve({ blob: file, name: file.name }); return; }
+				var scale = maximumEdge / Math.max(width, height);
+				var canvas = document.createElement('canvas');
+				canvas.width = Math.max(1, Math.round(width * scale));
+				canvas.height = Math.max(1, Math.round(height * scale));
+				var context = canvas.getContext('2d');
+				if (!context) { resolve({ blob: file, name: file.name }); return; }
+				context.drawImage(image, 0, 0, canvas.width, canvas.height);
+				var mime = file.type === 'image/png' ? 'image/png' : 'image/jpeg';
+				canvas.toBlob(function (blob) {
+					if (!blob) { resolve({ blob: file, name: file.name }); return; }
+					resolve({ blob: blob, name: resizedName(file.name, mime) });
+				}, mime, mime === 'image/png' ? undefined : quality);
+			};
+			image.onerror = function () { URL.revokeObjectURL(url); resolve({ blob: file, name: file.name }); };
+			image.src = url;
+		});
+	}
+
 	function addFiles(fileList) {
 		var existing = {};
 		photos.forEach(function (photo) { if (photo.file) existing[stableFileKey(photo.file)] = true; });
@@ -338,17 +389,22 @@
 		event.preventDefault();
 		if (!form.reportValidity()) return;
 		if (!photos.length) { message.textContent = config.i18n.photoRequired; return; }
-		var payload = new FormData(form);
-		payload.delete('new_images');
-		photos.forEach(function (photo) {
-			payload.append('image_order[]', photo.key);
-			if (photo.isNew) payload.append('new_images[' + photo.localId + ']', photo.file, photo.file.name);
-			else payload.append('existing_images[]', photo.id);
-		});
-		message.textContent = config.i18n.saving;
 		var button = form.querySelector('button[type="submit"]');
 		button.disabled = true;
-		request('save', payload, true).then(function (data) {
+		message.textContent = config.i18n.preparingPhotos;
+		Promise.all(photos.map(function (photo) {
+			return photo.isNew ? preparePhoto(photo.file) : Promise.resolve(null);
+		})).then(function (prepared) {
+			var payload = new FormData(form);
+			payload.delete('new_images');
+			photos.forEach(function (photo, index) {
+				payload.append('image_order[]', photo.key);
+				if (photo.isNew) payload.append('new_images[' + photo.localId + ']', prepared[index].blob, prepared[index].name);
+				else payload.append('existing_images[]', photo.id);
+			});
+			message.textContent = config.i18n.saving;
+			return request('save', payload, true);
+		}).then(function (data) {
 			message.textContent = data.message;
 			setTimeout(function () { showEditor(false); loadProducts(true); }, 500);
 		}).catch(function (error) { message.textContent = error.message; }).finally(function () { button.disabled = false; });
@@ -405,6 +461,7 @@
 	Array.prototype.forEach.call(form.elements.publish_mode, function (radio) {
 		radio.addEventListener('change', function () { var active = radio.checked && radio.value === 'future'; schedule.hidden = !active; scheduleInput.required = active; });
 	});
+	schedule.hidden = !form.querySelector('[name="publish_mode"][value="future"]').checked;
 	search.addEventListener('input', function () { clearTimeout(debounceTimer); debounceTimer = setTimeout(function () { loadProducts(true); }, 250); });
 	statusFilter.addEventListener('change', function () { loadProducts(true); });
 	moreButton.addEventListener('click', function () { page += 1; loadProducts(false); });

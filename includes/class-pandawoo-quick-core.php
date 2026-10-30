@@ -10,6 +10,7 @@ final class PandaWoo_Quick_Core {
 	const PAGE_SLUG = 'pandawoo-quick';
 	const APP_QUERY = 'pandawoo_quick_app';
 	const DEVICE_OPTION = 'pandawoo_quick_devices';
+	const ERROR_LOG_OPTION = 'pandawoo_quick_error_log';
 	const DEVICE_COOKIE = 'pandawoo_quick_device';
 	const NONCE_ACTION = 'pandawoo_quick';
 	const PAIR_ACTION = 'pandawoo_quick_pair';
@@ -33,7 +34,7 @@ final class PandaWoo_Quick_Core {
 		add_action( 'admin_post_nopriv_pandawoo_quick_manifest', array( __CLASS__, 'manifest' ) );
 		add_action( 'admin_post_pandawoo_quick_service_worker', array( __CLASS__, 'service_worker' ) );
 		add_action( 'admin_post_nopriv_pandawoo_quick_service_worker', array( __CLASS__, 'service_worker' ) );
-		foreach ( array( 'list', 'get', 'save', 'disconnect', 'report_device' ) as $operation ) {
+		foreach ( array( 'list', 'get', 'save', 'disconnect', 'report_device', 'client_error' ) as $operation ) {
 			add_action( 'wp_ajax_pandawoo_quick_' . $operation, array( __CLASS__, 'ajax_' . $operation ) );
 			add_action( 'wp_ajax_nopriv_pandawoo_quick_' . $operation, array( __CLASS__, 'ajax_' . $operation ) );
 		}
@@ -85,9 +86,11 @@ final class PandaWoo_Quick_Core {
 				'previous' => __( 'Move image earlier', 'pandawoo-quick' ),
 				'next' => __( 'Move image later', 'pandawoo-quick' ),
 				'photos' => __( '%d photos selected', 'pandawoo-quick' ),
+				'preparingPhotos' => __( 'Preparing photos…', 'pandawoo-quick' ),
 				'saving' => __( 'Saving product…', 'pandawoo-quick' ),
 				'loading' => __( 'Loading products…', 'pandawoo-quick' ),
 				'network' => __( 'The server could not be reached. Please try again.', 'pandawoo-quick' ),
+				'invalidResponse' => __( 'The server returned an unreadable response. Please try again. If this happens again, check the technical error log in PandaWoo Quick.', 'pandawoo-quick' ),
 				'photoRequired' => __( 'Please add at least one product photo.', 'pandawoo-quick' ),
 				'newProduct' => __( 'New product', 'pandawoo-quick' ),
 				'editProduct' => __( 'Edit product', 'pandawoo-quick' ),
@@ -176,6 +179,7 @@ final class PandaWoo_Quick_Core {
 			echo '<section class="pwq-card pwq-pair" data-pairing-id="' . esc_attr( $pairing['id'] ) . '"><div><h2>' . esc_html__( 'Connect a phone', 'pandawoo-quick' ) . '</h2><p>' . esc_html__( 'Scan this one-time code. It expires after ten minutes and does not contain your WordPress password.', 'pandawoo-quick' ) . '</p><p class="pwq-pair-state" aria-live="polite">' . esc_html__( 'Waiting for the phone…', 'pandawoo-quick' ) . '</p></div><div><div class="pwq-qr" data-url="' . esc_attr( $pairing['url'] ) . '"></div><small>' . esc_html__( 'The code can be used once.', 'pandawoo-quick' ) . '</small></div></section>';
 			echo '<section class="pwq-install-guide" hidden aria-live="polite"></section>';
 			self::render_devices();
+			self::render_error_log();
 			self::render_product_info();
 		}
 		$shop = self::shop_context();
@@ -331,6 +335,27 @@ final class PandaWoo_Quick_Core {
 		echo '</ul></section>';
 	}
 
+	private static function record_error( $context, $message ) {
+		$records = get_option( self::ERROR_LOG_OPTION, array() );
+		if ( ! is_array( $records ) ) $records = array();
+		$records[] = array(
+			'time' => time(),
+			'context' => sanitize_key( $context ),
+			'message' => wp_html_excerpt( sanitize_text_field( wp_strip_all_tags( (string) $message ) ), 500, '…' ),
+		);
+		update_option( self::ERROR_LOG_OPTION, array_slice( $records, -20 ), false );
+	}
+
+	private static function render_error_log() {
+		$records = get_option( self::ERROR_LOG_OPTION, array() );
+		if ( ! is_array( $records ) || ! $records ) return;
+		echo '<section class="pwq-card pwq-error-log"><h2>' . esc_html__( 'Technical error log', 'pandawoo-quick' ) . '</h2><p>' . esc_html__( 'Recent errors detected by PandaWoo Quick. No product or customer data is stored here.', 'pandawoo-quick' ) . '</p><ul>';
+		foreach ( array_reverse( array_slice( $records, -10 ) ) as $record ) {
+			echo '<li><strong>' . esc_html( wp_date( 'd.m.Y H:i', absint( $record['time'] ?? 0 ) ) ) . '</strong> <code>' . esc_html( $record['context'] ?? 'unknown' ) . '</code> ' . esc_html( $record['message'] ?? '' ) . '</li>';
+		}
+		echo '</ul></section>';
+	}
+
 	private static function contactpanda_available() {
 		return defined( 'CONTACTPANDA_VERSION' ) || class_exists( 'ContactPanda' ) || class_exists( 'ContactPanda_Admin' );
 	}
@@ -461,18 +486,22 @@ final class PandaWoo_Quick_Core {
 		$existing_ids = array_values( array_filter( array_map( 'absint', (array) ( $_POST['existing_images'] ?? array() ) ) ) );
 		$allowed_existing = $id ? array_values( array_filter( array_merge( array( $product->get_image_id() ), $product->get_gallery_image_ids() ) ) ) : array();
 		foreach ( $existing_ids as $attachment_id ) if ( ! in_array( $attachment_id, $allowed_existing, true ) || 'attachment' !== get_post_type( $attachment_id ) || ! wp_attachment_is_image( $attachment_id ) ) wp_send_json_error( array( 'message' => __( 'An image selection is invalid.', 'pandawoo-quick' ) ), 422 );
-		$new_files = self::request_files();
-		$uploaded = self::upload_files( $new_files, $name );
-		if ( is_wp_error( $uploaded ) ) wp_send_json_error( array( 'message' => $uploaded->get_error_message() ), 422 );
-		$order = array_map( 'sanitize_text_field', (array) ( $_POST['image_order'] ?? array() ) );
-		$images = array();
-		foreach ( $order as $token ) {
-			if ( 0 === strpos( $token, 'existing:' ) ) { $candidate = absint( substr( $token, 9 ) ); if ( in_array( $candidate, $existing_ids, true ) ) $images[] = $candidate; }
-			if ( 0 === strpos( $token, 'new:' ) ) { $key = sanitize_key( substr( $token, 4 ) ); if ( isset( $uploaded[ $key ] ) ) $images[] = $uploaded[ $key ]; }
-		}
-		$images = array_values( array_unique( array_slice( $images, 0, self::MAX_IMAGES ) ) );
-		if ( ! $images ) { self::delete_attachments( $uploaded ); wp_send_json_error( array( 'message' => __( 'Please add at least one product photo.', 'pandawoo-quick' ) ), 422 ); }
+		$uploaded = array();
 		try {
+			$new_files = self::request_files();
+			$uploaded = self::upload_files( $new_files, $name );
+			if ( is_wp_error( $uploaded ) ) {
+				self::record_error( 'upload', $uploaded->get_error_message() );
+				wp_send_json_error( array( 'message' => $uploaded->get_error_message() ), 422 );
+			}
+			$order = array_map( 'sanitize_text_field', (array) ( $_POST['image_order'] ?? array() ) );
+			$images = array();
+			foreach ( $order as $token ) {
+				if ( 0 === strpos( $token, 'existing:' ) ) { $candidate = absint( substr( $token, 9 ) ); if ( in_array( $candidate, $existing_ids, true ) ) $images[] = $candidate; }
+				if ( 0 === strpos( $token, 'new:' ) ) { $key = sanitize_key( substr( $token, 4 ) ); if ( isset( $uploaded[ $key ] ) ) $images[] = $uploaded[ $key ]; }
+			}
+			$images = array_values( array_unique( array_slice( $images, 0, self::MAX_IMAGES ) ) );
+			if ( ! $images ) { self::delete_attachments( $uploaded ); wp_send_json_error( array( 'message' => __( 'Please add at least one product photo.', 'pandawoo-quick' ) ), 422 ); }
 			$product->set_name( $name );
 			$product->set_regular_price( (string) $price );
 			$product->set_short_description( wp_kses_post( wp_unslash( $_POST['short_description'] ?? '' ) ) );
@@ -497,8 +526,17 @@ final class PandaWoo_Quick_Core {
 		} catch ( Throwable $error ) {
 			if ( $is_new && $id ) wp_delete_post( $id, true );
 			self::delete_attachments( $uploaded );
+			self::record_error( 'save', $error->getMessage() );
 			wp_send_json_error( array( 'message' => $error->getMessage() ), 422 );
 		}
+	}
+
+	public static function ajax_client_error() {
+		self::require_access();
+		$operation = sanitize_key( wp_unslash( $_POST['operation'] ?? 'unknown' ) );
+		$status = absint( $_POST['status'] ?? 0 );
+		self::record_error( 'response_' . $operation, 'HTTP ' . $status . ' / JSON' );
+		wp_send_json_success();
 	}
 
 	public static function ajax_disconnect() {

@@ -4,7 +4,7 @@ Tags: woocommerce, products, mobile, pwa
 Requires at least: 6.4
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 0.2.6
+Stable tag: 0.2.7
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -65,6 +65,11 @@ No. The only edition limit is one simultaneous shop connection. Product capture 
 Pairing codes expire after ten minutes and may be used once. Device secrets are stored only as SHA-256 hashes. Connected devices can be revoked in WordPress.
 
 == Changelog ==
+
+= 0.2.7 =
+* Reduces oversized phone photos before upload to avoid server failures.
+* Replaces unreadable server responses with a clear message and records a privacy-safe technical error entry.
+* Hides the scheduling date unless scheduled publication is selected.
 
 = 0.2.6 =
 * Keeps the Android installation action visible even when the browser does not provide a direct installation prompt.
