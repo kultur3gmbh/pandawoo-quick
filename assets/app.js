@@ -15,6 +15,7 @@
 	var newButton = root.querySelector('.pwq-new');
 	var disconnectButton = root.querySelector('.pwq-disconnect');
 	var installButton = root.querySelector('.pwq-install-app');
+	var installFallback = root.querySelector('.pwq-install-fallback');
 	var pairingPanel = root.querySelector('.pwq-pair');
 	var installGuide = root.querySelector('.pwq-install-guide');
 	var backButton = root.querySelector('.pwq-back');
@@ -373,16 +374,30 @@
 	window.addEventListener('beforeinstallprompt', function (event) {
 		event.preventDefault();
 		installPrompt = event;
-		if (installButton && !isStandalone()) installButton.hidden = false;
+		if (installButton && !isStandalone() && detectPlatform() === 'android') installButton.hidden = false;
 	});
 	if (installButton) {
+		installButton.hidden = isStandalone() || detectPlatform() !== 'android';
 		installButton.addEventListener('click', function () {
-			if (!installPrompt) return;
+			if (!installPrompt) {
+				if (installFallback) installFallback.hidden = false;
+				installButton.setAttribute('aria-expanded', 'true');
+				return;
+			}
 			installPrompt.prompt();
-			installPrompt.userChoice.finally(function () { installPrompt = null; installButton.hidden = true; });
+			installPrompt.userChoice.then(function (choice) {
+				installPrompt = null;
+				if (!choice || choice.outcome !== 'accepted') {
+					if (installFallback) installFallback.hidden = false;
+					installButton.setAttribute('aria-expanded', 'true');
+				}
+			});
 		});
 	}
-	window.addEventListener('appinstalled', function () { if (installButton) installButton.hidden = true; });
+	window.addEventListener('appinstalled', function () {
+		if (installButton) installButton.hidden = true;
+		if (installFallback) installFallback.hidden = true;
+	});
 	backButton.addEventListener('click', function () { releasePhotos(); showEditor(false); });
 	imageInput.addEventListener('change', function () { addFiles(imageInput.files); });
 	categorySearch.addEventListener('input', filterCategories);

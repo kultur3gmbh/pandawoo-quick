@@ -21,7 +21,7 @@ def quote(value):
 
 def header(locale=None):
     lang = locale or ""
-    return ["msgid \"\"", "msgstr \"\"", '"Project-Id-Version: PandaWoo Quick 0.2.5\\n"', '"Report-Msgid-Bugs-To: https://github.com/kultur3gmbh/pandawoo-quick/issues\\n"', f'"POT-Creation-Date: {datetime.date.today().isoformat()} 00:00+0000\\n"', f'"PO-Revision-Date: {datetime.date.today().isoformat()} 00:00+0000\\n"', '"Last-Translator: Kultur³ GmbH\\n"', '"Language-Team: ContactPanda\\n"', f'"Language: {lang}\\n"', '"MIME-Version: 1.0\\n"', '"Content-Type: text/plain; charset=UTF-8\\n"', '"Content-Transfer-Encoding: 8bit\\n"', '"Plural-Forms: nplurals=2; plural=(n != 1);\\n"', '"X-Domain: pandawoo-quick\\n"', ""]
+    return ["msgid \"\"", "msgstr \"\"", '"Project-Id-Version: PandaWoo Quick 0.2.6\\n"', '"Report-Msgid-Bugs-To: https://github.com/kultur3gmbh/pandawoo-quick/issues\\n"', f'"POT-Creation-Date: {datetime.date.today().isoformat()} 00:00+0000\\n"', f'"PO-Revision-Date: {datetime.date.today().isoformat()} 00:00+0000\\n"', '"Last-Translator: Kultur³ GmbH\\n"', '"Language-Team: ContactPanda\\n"', f'"Language: {lang}\\n"', '"MIME-Version: 1.0\\n"', '"Content-Type: text/plain; charset=UTF-8\\n"', '"Content-Transfer-Encoding: 8bit\\n"', '"Plural-Forms: nplurals=2; plural=(n != 1);\\n"', '"X-Domain: pandawoo-quick\\n"', ""]
 
 refs = {}
 for path in sorted(ROOT.rglob("*.php")):
