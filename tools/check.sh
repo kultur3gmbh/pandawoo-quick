@@ -43,8 +43,8 @@ if grep -Eq '[ÄÖÜäöüß]|Home-Bildschirm|Diesen Shop|Veröffentlicht' "$js_
 	exit 1
 fi
 
-if ! grep -q "Version: 0.2.8" "$root/pandawoo-quick.php" || ! grep -q "PANDAWOO_QUICK_VERSION', '0.2.8'" "$root/pandawoo-quick.php" || ! grep -q "Stable tag: 0.2.8" "$root/readme.txt"; then
-	echo "Version metadata is not synchronized at 0.2.8." >&2
+if ! grep -q "Version: 0.3.0" "$root/pandawoo-quick.php" || ! grep -q "PANDAWOO_QUICK_VERSION', '0.3.0'" "$root/pandawoo-quick.php" || ! grep -q "Stable tag: 0.3.0" "$root/readme.txt"; then
+	echo "Version metadata is not synchronized at 0.3.0." >&2
 	exit 1
 fi
 
