@@ -7,7 +7,8 @@ defined( 'ABSPATH' ) || exit;
  * replace branding/AI behavior through the documented filters.
  */
 final class PandaWoo_Quick_Core {
-	const PAGE_SLUG = 'pandawoo-quick';
+	const MENU_SLUG = 'pandawoo';
+	const PAGE_SLUG = 'pandawoo';
 	const APP_QUERY = 'pandawoo_quick_app';
 	const DEVICE_OPTION = 'pandawoo_quick_devices';
 	const ERROR_LOG_OPTION = 'pandawoo_quick_error_log';
@@ -39,7 +40,13 @@ final class PandaWoo_Quick_Core {
 			add_action( 'wp_ajax_nopriv_pandawoo_quick_' . $operation, array( __CLASS__, 'ajax_' . $operation ) );
 		}
 		add_action( 'wp_ajax_pandawoo_quick_pair_status', array( __CLASS__, 'ajax_pair_status' ) );
+		do_action( 'pandawoo_quick_loaded', PANDAWOO_QUICK_API_VERSION );
 	}
+
+	/** Stable public boundary for separately installed PandaWoo extensions. */
+	public static function api_version() { return PANDAWOO_QUICK_API_VERSION; }
+	public static function menu_slug() { return self::MENU_SLUG; }
+	public static function is_compatible( $required = '1.0' ) { return version_compare( PANDAWOO_QUICK_API_VERSION, (string) $required, '>=' ); }
 
 	public static function load_textdomain() {
 		load_plugin_textdomain( 'pandawoo-quick', false, dirname( plugin_basename( PANDAWOO_QUICK_PATH . 'pandawoo-quick.php' ) ) . '/languages' );
@@ -54,7 +61,9 @@ final class PandaWoo_Quick_Core {
 	}
 
 	public static function menu() {
-		self::$page_hook = add_submenu_page( 'woocommerce', __( 'PandaWoo Quick', 'pandawoo-quick' ), __( 'PandaWoo Quick', 'pandawoo-quick' ), self::capability(), self::PAGE_SLUG, array( __CLASS__, 'admin_page' ) );
+		self::$page_hook = add_menu_page( __( 'PandaWoo', 'pandawoo-quick' ), __( 'PandaWoo', 'pandawoo-quick' ), self::capability(), self::MENU_SLUG, array( __CLASS__, 'admin_page' ), 'dashicons-store', 55.55 );
+		add_submenu_page( self::MENU_SLUG, __( 'PandaWoo Quick', 'pandawoo-quick' ), __( 'Quick', 'pandawoo-quick' ), self::capability(), self::PAGE_SLUG, array( __CLASS__, 'admin_page' ) );
+		do_action( 'pandawoo_quick_admin_menu', self::MENU_SLUG );
 	}
 
 	public static function admin_assets( $hook ) {
@@ -76,8 +85,8 @@ final class PandaWoo_Quick_Core {
 			'serviceWorkerScope' => wp_parse_url( home_url( '/' ), PHP_URL_PATH ) ?: '/',
 			'assetUrl' => PANDAWOO_QUICK_URL . 'assets/',
 			'currency' => function_exists( 'get_woocommerce_currency_symbol' ) ? get_woocommerce_currency_symbol() : '',
-			'edition' => (string) apply_filters( 'pandawoo_quick_edition', 'free' ),
-			'maxShops' => max( 1, absint( apply_filters( 'pandawoo_quick_max_shops', 1 ) ) ),
+			'edition' => 'quick',
+			'maxShops' => 1,
 			'shop' => self::shop_context(),
 			'i18n' => array(
 				'cover' => __( 'Cover image', 'pandawoo-quick' ),
@@ -133,7 +142,7 @@ final class PandaWoo_Quick_Core {
 
 	/**
 	 * Stable shop boundary shared by sessions, API responses and future adapters.
-	 * A future multi-shop client may keep several of these records; Quick Free
+	 * A future multi-shop client may keep several of these records; Quick
 	 * deliberately exposes only the single context returned by this installation.
 	 */
 	private static function shop_context() {
@@ -371,7 +380,7 @@ final class PandaWoo_Quick_Core {
 		} else {
 			echo '<section><strong>' . esc_html__( 'ContactPanda Basic', 'pandawoo-quick' ) . '</strong><p>' . esc_html__( 'An optional free CRM foundation for customer and contact management. PandaWoo Quick works fully without it.', 'pandawoo-quick' ) . '</p></section>';
 		}
-		echo '<section><strong>' . esc_html__( 'ContactPanda Plus and Pro', 'pandawoo-quick' ) . '</strong><p>' . esc_html__( 'Optional CRM, communication and automation features for businesses that need more than mobile product capture.', 'pandawoo-quick' ) . '</p></section><section><strong>' . esc_html__( 'PandaWoo multi-shop', 'pandawoo-quick' ) . '</strong><p>' . esc_html__( 'A future upgrade for managing several shops at the same time. Quick Free keeps all product capture features and supports one active shop connection.', 'pandawoo-quick' ) . '</p></section></div><p class="pwq-product-info-note">' . esc_html__( 'No account, tracking or paid extension is required to use PandaWoo Quick.', 'pandawoo-quick' ) . '</p></aside>';
+		echo '<section><strong>' . esc_html__( 'ContactPanda Plus and Pro', 'pandawoo-quick' ) . '</strong><p>' . esc_html__( 'Optional CRM, communication and automation features for businesses that need more than mobile product capture.', 'pandawoo-quick' ) . '</p></section><section><strong>' . esc_html__( 'PandaWoo Mobile', 'pandawoo-quick' ) . '</strong><p>' . esc_html__( 'A future product for managing several shops from one mobile app. PandaWoo Quick supports one active shop connection.', 'pandawoo-quick' ) . '</p></section></div><p class="pwq-product-info-note">' . esc_html__( 'No account, tracking or paid extension is required to use PandaWoo Quick.', 'pandawoo-quick' ) . '</p></aside>';
 	}
 
 	public static function dismiss_product_info() {
@@ -416,7 +425,8 @@ final class PandaWoo_Quick_Core {
 		$brand_ids = taxonomy_exists( 'product_brand' ) ? wp_get_object_terms( $product->get_id(), 'product_brand', array( 'fields' => 'ids' ) ) : array();
 		if ( is_wp_error( $brand_ids ) ) $brand_ids = array();
 		$stock_mode = $product->get_manage_stock() ? 'managed' : ( 'outofstock' === $product->get_stock_status() ? 'outofstock' : 'instock' );
-		return array( 'id' => $product->get_id(), 'name' => $product->get_name(), 'price' => $product->get_regular_price(), 'shortDescription' => $product->get_short_description(), 'description' => $product->get_description(), 'categoryId' => (string) ( $product->get_category_ids()[0] ?? '' ), 'brandId' => (string) ( $brand_ids[0] ?? '' ), 'stockMode' => $stock_mode, 'stockQuantity' => max( 0, (int) $product->get_stock_quantity() ), 'status' => $status, 'publishAt' => $publish_at, 'images' => $images, 'editUrl' => get_edit_post_link( $product->get_id(), 'raw' ) );
+		$data = array( 'id' => $product->get_id(), 'name' => $product->get_name(), 'price' => $product->get_regular_price(), 'shortDescription' => $product->get_short_description(), 'description' => $product->get_description(), 'categoryId' => (string) ( $product->get_category_ids()[0] ?? '' ), 'brandId' => (string) ( $brand_ids[0] ?? '' ), 'stockMode' => $stock_mode, 'stockQuantity' => max( 0, (int) $product->get_stock_quantity() ), 'status' => $status, 'publishAt' => $publish_at, 'images' => $images, 'editUrl' => get_edit_post_link( $product->get_id(), 'raw' ) );
+		return (array) apply_filters( 'pandawoo_quick_product_data', $data, $product );
 	}
 
 	public static function ajax_list() {
@@ -427,6 +437,7 @@ final class PandaWoo_Quick_Core {
 		$status = sanitize_key( $_REQUEST['status'] ?? '' );
 		if ( $search ) $args['s'] = $search;
 		if ( in_array( $status, array( 'publish', 'draft', 'future' ), true ) ) $args['status'] = $status;
+		$args = (array) apply_filters( 'pandawoo_quick_product_query_args', $args, $search, $status );
 		$result = wc_get_products( $args );
 		$items = array();
 		foreach ( $result->products as $product ) $items[] = self::product_data( $product );
@@ -502,6 +513,7 @@ final class PandaWoo_Quick_Core {
 		}
 		$uploaded = array();
 		try {
+			do_action( 'pandawoo_quick_before_product_save', $product, $is_new, $_POST );
 			$new_files = self::request_files();
 			$uploaded = self::upload_files( $new_files, $name );
 			if ( is_wp_error( $uploaded ) ) {
@@ -543,6 +555,7 @@ final class PandaWoo_Quick_Core {
 				$local = $scheduled_date->format( 'Y-m-d H:i:s' );
 				wp_update_post( array( 'ID' => $id, 'post_status' => 'future', 'post_date' => $local, 'post_date_gmt' => get_gmt_from_date( $local ) ) );
 			}
+			do_action( 'pandawoo_quick_after_product_save', $id, wc_get_product( $id ), $is_new );
 			wp_send_json_success( array( 'shop' => self::shop_context(), 'message' => $is_new ? __( 'The product has been created.', 'pandawoo-quick' ) : __( 'The product has been saved.', 'pandawoo-quick' ), 'product' => self::product_data( wc_get_product( $id ) ) ) );
 		} catch ( Throwable $error ) {
 			if ( $is_new && $id ) wp_delete_post( $id, true );
@@ -558,8 +571,10 @@ final class PandaWoo_Quick_Core {
 		$product = wc_get_product( $id );
 		if ( ! $product || ! is_a( $product, 'WC_Product_Simple' ) || ! current_user_can( 'delete_post', $id ) ) wp_send_json_error( array( 'message' => __( 'Product not found or not editable.', 'pandawoo-quick' ) ), 404 );
 		try {
+			do_action( 'pandawoo_quick_before_product_delete', $id, $product );
 			$deleted = $product->delete( true );
 			if ( ! $deleted || wc_get_product( $id ) ) throw new RuntimeException( __( 'WooCommerce could not delete the product.', 'pandawoo-quick' ) );
+			do_action( 'pandawoo_quick_after_product_delete', $id );
 			wp_send_json_success( array( 'message' => __( 'The product has been deleted.', 'pandawoo-quick' ) ) );
 		} catch ( Throwable $error ) {
 			self::record_error( 'delete', $error->getMessage() );

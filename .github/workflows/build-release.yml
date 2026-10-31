@@ -1,0 +1,45 @@
+name: Build PandaWoo Quick package
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install release verification tools
+        run: sudo apt-get update && sudo apt-get install -y ripgrep
+      - name: Verify source
+        run: ./tools/check.sh
+      - name: Build installable ZIP file
+        run: ./tools/build-release.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pandawoo-quick-package
+          path: dist/*
+          if-no-files-found: error
+      - name: Publish GitHub release
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
+            gh release upload "$GITHUB_REF_NAME" dist/* --clobber
+          else
+            gh release create "$GITHUB_REF_NAME" dist/* --verify-tag --generate-notes --latest
+          fi

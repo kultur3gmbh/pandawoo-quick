@@ -1,18 +1,18 @@
-# PandaWoo Quick Free
+# PandaWoo Quick
 
-PandaWoo Quick Free is a mobile-first WooCommerce product capture plugin. A phone is paired with a WordPress installation using a short-lived, single-use QR code and receives a revocable app session instead of a WordPress password.
+PandaWoo Quick is the complete free, mobile-first WooCommerce product capture plugin. A phone is paired with a WordPress installation using a short-lived, single-use QR code and receives a revocable app session instead of a WordPress password.
 
 ## Features
 
 - Installable mobile web app without the WordPress administration interface
-- One active WooCommerce shop connection per Quick Free installation
+- One active WooCommerce shop connection per Quick installation
 - Product list, search, creation and editing
 - Up to twelve product images with touch-friendly sorting
 - Hierarchical categories and optional WooCommerce brand assignment
 - Price, short description and detailed description
 - Immediate publishing, scheduled publishing and drafts
 - Illustrated Apple and Android installation guidance
-- Public, token-free GitHub release updates through WordPress
+- Updates through the official WordPress.org plugin update system
 - English source language plus German, German formal and German (Switzerland) translations
 - Official PandaWoo Quick mascot, connected-shop logo and refined typography
 - Animated, touch-friendly image reordering with reduced-motion support
@@ -28,16 +28,13 @@ PandaWoo Quick works without ContactPanda, an external account or a paid extensi
 
 ## Installation
 
-1. Download `pandawoo-quick-{version}.zip` from the latest public GitHub release.
-2. In WordPress, open **Plugins → Add New Plugin → Upload Plugin**.
-3. Upload the ZIP and activate PandaWoo Quick.
-4. Open **WooCommerce → PandaWoo Quick** and scan the QR code.
+1. Install PandaWoo Quick from the WordPress plugin directory.
+2. Activate the plugin together with WooCommerce.
+3. Open **PandaWoo → Quick** and scan the QR code.
 
 ## Updates
 
-The plugin checks the public GitHub API for the latest stable release of `kultur3gmbh/pandawoo-quick`. It accepts only the exact release asset name `pandawoo-quick-{version}.zip` and integrates with the standard WordPress plugin update screen.
-
-No GitHub token or ContactPanda component is required. Successful checks are cached for six hours; failed checks for fifteen minutes. A manual WordPress update check bypasses the cache. Network or GitHub failures leave the installed plugin fully operational.
+Updates are supplied by the official WordPress.org plugin update system. The distributed plugin contains no external updater and requires no GitHub token or ContactPanda component.
 
 ## Privacy and security
 
@@ -55,11 +52,11 @@ English is the source language. The repository ships a gettext POT template plus
 - German formal (`de_DE_formal`)
 - German (Switzerland) (`de_CH`)
 
-Run `python3 tools/make_i18n.py` after changing user-facing strings, then compile the PO catalogs before building a release.
+Run `python3 tools/make_i18n.py` after changing user-facing strings. It regenerates the POT, PO and compiled MO catalogs.
 
 ## License
 
-PandaWoo Quick Free is licensed under the GNU General Public License, version 2 or later (`GPL-2.0-or-later`). See the license declaration in the plugin header and the [GPL 2.0 text](https://www.gnu.org/licenses/old-licenses/gpl-2.0.html).
+PandaWoo Quick is licensed under the GNU General Public License, version 2 or later (`GPL-2.0-or-later`). See the license declaration in the plugin header and the [GPL 2.0 text](https://www.gnu.org/licenses/old-licenses/gpl-2.0.html).
 
 ## Releases
 

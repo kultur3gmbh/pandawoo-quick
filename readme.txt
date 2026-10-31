@@ -4,7 +4,7 @@ Tags: woocommerce, products, mobile, pwa
 Requires at least: 6.4
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 0.3.0
+Stable tag: 0.4.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -16,7 +16,7 @@ PandaWoo Quick connects a phone to a WooCommerce installation using a short-live
 
 It is fully usable without ContactPanda, without an external account and without a paid extension. It does not send tracking or product data to an external service.
 
-Updates are retrieved through the standard WordPress plugin update screen from public, token-free GitHub releases at https://github.com/kultur3gmbh/pandawoo-quick. Only the exactly named release asset `pandawoo-quick-{version}.zip` is accepted.
+Updates are delivered through the official WordPress.org plugin update system.
 
 PandaWoo Quick 0.2.0 supports:
 
@@ -28,10 +28,10 @@ PandaWoo Quick 0.2.0 supports:
 * Hierarchical category paths and optional WooCommerce brand assignment.
 * Immediate publishing, scheduled publishing and drafts.
 * Installation as a standalone web app.
-* One active shop connection per Quick Free app/device installation.
+* One active shop connection per Quick app/device installation.
 * Secure disconnection followed by pairing with a different shop.
 
-The session and API contracts carry a stable shop identifier. This keeps the core ready for a future multi-shop PandaWoo client while the Quick Free interface intentionally has no shop switcher.
+The session and API contracts carry a stable shop identifier. This keeps the core ready for the future PandaWoo Mobile product while the Quick interface intentionally has no shop switcher.
 
 Optional information about ContactPanda and future PandaWoo editions appears only in a separate, dismissible section in WordPress. It never interrupts the mobile product workflow.
 
@@ -45,7 +45,7 @@ No. PandaWoo Quick works independently. Optional integrations are activated only
 
 No. Pairing and product management take place between the phone and the connected WordPress installation.
 
-= Can Quick Free connect to several shops at once? =
+= Can Quick connect to several shops at once? =
 
 No. One app/device installation has one active shop connection. You can securely disconnect it and then pair the device with a different shop. Because browser-installed web apps are bound to their original web address, the old home-screen shortcut must be replaced when the new shop uses another domain.
 
@@ -57,7 +57,7 @@ No. The only edition limit is one simultaneous shop connection. Product capture 
 
 1. Install and activate WooCommerce.
 2. Install and activate PandaWoo Quick.
-3. Open WooCommerce > PandaWoo Quick.
+3. Open PandaWoo > Quick.
 4. Scan the QR code with the phone.
 
 == Security ==
@@ -65,6 +65,11 @@ No. The only edition limit is one simultaneous shop connection. Product capture 
 Pairing codes expire after ten minutes and may be used once. Device secrets are stored only as SHA-256 hashes. Connected devices can be revoked in WordPress.
 
 == Changelog ==
+
+= 0.4.0 =
+* Makes Quick the complete free PandaWoo base plugin with one shared PandaWoo menu.
+* Adds a stable, versioned extension boundary for separately installed add-ons.
+* Moves updates to the official WordPress.org update channel and contains no paid feature unlocking.
 
 = 0.3.0 =
 * Adds complete stock availability and optional quantity management to mobile product editing.

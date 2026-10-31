@@ -3,6 +3,7 @@
 import datetime
 import pathlib
 import re
+import struct
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 LANG = ROOT / "languages"
@@ -13,6 +14,7 @@ DE = {
 }
 
 DE.update({
+	"A future product for managing several shops from one mobile app. PandaWoo Quick supports one active shop connection.": "Ein zukünftiges Produkt zur Verwaltung mehrerer Shops über eine mobile App. PandaWoo Quick unterstützt eine aktive Shop-Verbindung.",
 	"Availability": "Verfügbarkeit",
 	"Available": "Verfügbar",
 	"Delete product": "Produkt löschen",
@@ -20,6 +22,9 @@ DE.update({
 	"Do you really want to delete the product “%s”? This cannot be undone.": "Möchtest du das Produkt „%s“ wirklich löschen? Das ist nicht rückgängig zu machen.",
 	"Manage stock quantity": "Lagerbestand verwalten",
 	"Not available": "Nicht verfügbar",
+	"PandaWoo Mobile": "PandaWoo Mobile",
+	"PandaWoo": "PandaWoo",
+	"Quick": "Quick",
     "Preparing photos…": "Fotos werden vorbereitet …",
 	"Stock quantity": "Lagerbestand",
     "Technical error log": "Technisches Fehlerprotokoll",
@@ -28,6 +33,11 @@ DE.update({
     "The server returned an unreadable response. Please try again. If this happens again, check the technical error log in PandaWoo Quick.": "Der Server hat eine nicht lesbare Antwort gesendet. Bitte versuche es erneut. Falls das wieder passiert, prüfe das technische Fehlerprotokoll in PandaWoo Quick.",
 	"WooCommerce could not delete the product.": "WooCommerce konnte das Produkt nicht löschen.",
 })
+
+DE.pop("A future upgrade for managing several shops at the same time. Quick Free keeps all product capture features and supports one active shop connection.", None)
+DE.pop("Mobile-first WooCommerce product capture through a securely paired installable web app.", None)
+DE.pop("PandaWoo multi-shop", None)
+DE.pop("Version %s", None)
 
 FORMAL_OVERRIDES = {
 "Capture and maintain WooCommerce products from your phone.":"Erfassen und bearbeiten Sie WooCommerce-Produkte mit Ihrem Smartphone.","In Safari, tap the square with the upward arrow. Depending on your Safari layout, it is at the top or bottom.":"Tippen Sie in Safari auf das Quadrat mit dem Pfeil nach oben. Je nach Safari-Ansicht befindet es sich oben oder unten.","Keep these instructions open on the computer and follow the steps on your phone.":"Lassen Sie diese Anleitung am Computer geöffnet und führen Sie die Schritte auf Ihrem Smartphone aus.","Make sure “Open as Web App” is enabled.":"Achten Sie darauf, dass „Als Web-App öffnen“ eingeschaltet ist.","More tools when your shop grows":"Mehr Werkzeuge, wenn Ihr Shop wächst","Now open the PandaWoo Quick icon on your Home Screen.":"Öffnen Sie jetzt das PandaWoo-Quick-Symbol auf Ihrem Home-Bildschirm.","Open the browser menu on your phone and choose “Add to Home Screen” or “Install app”.":"Öffnen Sie auf Ihrem Smartphone das Browsermenü und wählen Sie „Zum Home-Bildschirm hinzufügen“ oder „App installieren“.","Please add at least one product photo.":"Bitte fügen Sie mindestens ein Produktfoto hinzu.","Please choose a future publication time.":"Bitte wählen Sie einen zukünftigen Veröffentlichungszeitpunkt.","Please complete all required product fields.":"Bitte füllen Sie alle erforderlichen Produktfelder aus.","Please select a valid brand.":"Bitte wählen Sie eine gültige Marke.","Scan this one-time code. It expires after ten minutes and does not contain your WordPress password.":"Scannen Sie diesen einmaligen Code. Er läuft nach zehn Minuten ab und enthält nicht Ihr WordPress-Passwort.","Scroll through the list and tap “Add to Home Screen”.":"Scrollen Sie durch die Liste und tippen Sie auf „Zum Home-Bildschirm hinzufügen“.","Tap “Add” in the top-right corner.":"Tippen Sie oben rechts auf „Hinzufügen“.","The QR code has expired. Reload the page to create a new code.":"Der QR-Code ist abgelaufen. Laden Sie die Seite neu, um einen neuen Code zu erzeugen.","The server could not be reached. Please try again.":"Der Server konnte nicht erreicht werden. Bitte versuchen Sie es erneut.","The shop has been disconnected. You can now pair this device with another shop.":"Der Shop wurde getrennt. Sie können dieses Gerät jetzt mit einem anderen Shop koppeln.","The “Install app” button appears on your phone. Tap it and confirm the browser dialog.":"Auf Ihrem Smartphone erscheint die Schaltfläche „App installieren“. Tippen Sie darauf und bestätigen Sie den Browserdialog.","Then open PandaWoo Quick using the new icon on your Home Screen.":"Öffnen Sie PandaWoo Quick danach über das neue Symbol auf Ihrem Home-Bildschirm.","This user may not use PandaWoo Quick.":"Dieser Benutzer darf PandaWoo Quick nicht verwenden.","You do not have permission to edit products and upload photos.":"Sie haben keine Berechtigung, Produkte zu bearbeiten und Fotos hochzuladen.","You do not have permission to use PandaWoo Quick.":"Sie haben keine Berechtigung, PandaWoo Quick zu verwenden."
@@ -43,7 +53,31 @@ def quote(value):
 
 def header(locale=None):
     lang = locale or ""
-    return ["msgid \"\"", "msgstr \"\"", '"Project-Id-Version: PandaWoo Quick 0.3.0\\n"', '"Report-Msgid-Bugs-To: https://github.com/kultur3gmbh/pandawoo-quick/issues\\n"', f'"POT-Creation-Date: {datetime.date.today().isoformat()} 00:00+0000\\n"', f'"PO-Revision-Date: {datetime.date.today().isoformat()} 00:00+0000\\n"', '"Last-Translator: Kultur³ GmbH\\n"', '"Language-Team: ContactPanda\\n"', f'"Language: {lang}\\n"', '"MIME-Version: 1.0\\n"', '"Content-Type: text/plain; charset=UTF-8\\n"', '"Content-Transfer-Encoding: 8bit\\n"', '"Plural-Forms: nplurals=2; plural=(n != 1);\\n"', '"X-Domain: pandawoo-quick\\n"', ""]
+    return ["msgid \"\"", "msgstr \"\"", '"Project-Id-Version: PandaWoo Quick 0.4.0\\n"', '"Report-Msgid-Bugs-To: https://github.com/kultur3gmbh/pandawoo-quick/issues\\n"', f'"POT-Creation-Date: {datetime.date.today().isoformat()} 00:00+0000\\n"', f'"PO-Revision-Date: {datetime.date.today().isoformat()} 00:00+0000\\n"', '"Last-Translator: Kultur³ GmbH\\n"', '"Language-Team: ContactPanda\\n"', f'"Language: {lang}\\n"', '"MIME-Version: 1.0\\n"', '"Content-Type: text/plain; charset=UTF-8\\n"', '"Content-Transfer-Encoding: 8bit\\n"', '"Plural-Forms: nplurals=2; plural=(n != 1);\\n"', '"X-Domain: pandawoo-quick\\n"', ""]
+
+def mo_bytes(catalog, language):
+    values = {"": f"Content-Type: text/plain; charset=UTF-8\nLanguage: {language}\nPlural-Forms: nplurals=2; plural=(n != 1);\n", **catalog}
+    keys = sorted(values)
+    originals = [key.encode("utf-8") for key in keys]
+    translations = [values[key].encode("utf-8") for key in keys]
+    count = len(keys)
+    original_table = 28
+    translation_table = original_table + count * 8
+    original_data = translation_table + count * 8
+    original_blob = b"".join(value + b"\0" for value in originals)
+    translation_data = original_data + len(original_blob)
+    output = bytearray(struct.pack("<7I", 0x950412DE, 0, count, original_table, translation_table, 0, 0))
+    offset = original_data
+    for value in originals:
+        output.extend(struct.pack("<2I", len(value), offset))
+        offset += len(value) + 1
+    offset = translation_data
+    for value in translations:
+        output.extend(struct.pack("<2I", len(value), offset))
+        offset += len(value) + 1
+    output.extend(original_blob)
+    output.extend(b"".join(value + b"\0" for value in translations))
+    return bytes(output)
 
 refs = {}
 for path in sorted(ROOT.rglob("*.php")):
@@ -74,6 +108,7 @@ for locale, translations in catalogs.items():
     for msgid in sorted(refs):
         po += ["#: " + " ".join(refs[msgid]), "msgid " + quote(msgid), "msgstr " + quote(translations[msgid]), ""]
     (LANG / f"pandawoo-quick-{locale}.po").write_text("\n".join(po), encoding="utf-8")
+    (LANG / f"pandawoo-quick-{locale}.mo").write_bytes(mo_bytes({msgid: translations[msgid] for msgid in refs}, locale))
 
-print(f"Generated POT and {len(catalogs)} PO catalogs with {len(refs)} messages.")
+print(f"Generated POT and {len(catalogs)} PO/MO catalogs with {len(refs)} messages.")
 
