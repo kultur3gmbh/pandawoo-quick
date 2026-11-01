@@ -99,6 +99,7 @@ final class PandaWoo_Quick_Core {
 				'saving' => __( 'Saving product…', 'pandawoo-quick' ),
 				'loading' => __( 'Loading products…', 'pandawoo-quick' ),
 				'network' => __( 'The server could not be reached. Please try again.', 'pandawoo-quick' ),
+				'serverError' => __( 'The server ran out of available resources. PandaWoo Quick stopped retrying automatically. Please try again after the server has recovered.', 'pandawoo-quick' ),
 				'invalidResponse' => __( 'The server returned an unreadable response. Please try again. If this happens again, check the technical error log in PandaWoo Quick.', 'pandawoo-quick' ),
 				'photoRequired' => __( 'Please add at least one product photo.', 'pandawoo-quick' ),
 				'newProduct' => __( 'New product', 'pandawoo-quick' ),
@@ -429,10 +430,30 @@ final class PandaWoo_Quick_Core {
 		return (array) apply_filters( 'pandawoo_quick_product_data', $data, $product );
 	}
 
+	/**
+	 * Small list representation. Product descriptions, galleries, taxonomies and
+	 * page-builder content are intentionally loaded only when a product is opened.
+	 */
+	private static function product_list_data( $product_id ) {
+		$product_id = absint( $product_id );
+		$post = get_post( $product_id );
+		if ( ! $post || 'product' !== $post->post_type ) return array();
+		$image_id = absint( get_post_thumbnail_id( $product_id ) );
+		$image_url = $image_id ? wp_get_attachment_image_url( $image_id, 'medium' ) : '';
+		$data = array(
+			'id' => $product_id,
+			'name' => $post->post_title,
+			'price' => (string) get_post_meta( $product_id, '_regular_price', true ),
+			'status' => $post->post_status,
+			'images' => $image_url ? array( array( 'id' => $image_id, 'url' => $image_url ) ) : array(),
+		);
+		return (array) apply_filters( 'pandawoo_quick_product_list_data', $data, $product_id );
+	}
+
 	public static function ajax_list() {
 		self::require_access();
 		$page = max( 1, absint( $_REQUEST['page'] ?? 1 ) );
-		$args = array( 'limit' => 20, 'page' => $page, 'paginate' => true, 'orderby' => 'date', 'order' => 'DESC', 'return' => 'objects', 'type' => 'simple', 'status' => array( 'publish', 'draft', 'future', 'pending', 'private' ) );
+		$args = array( 'limit' => 20, 'page' => $page, 'paginate' => true, 'orderby' => 'date', 'order' => 'DESC', 'return' => 'ids', 'type' => 'simple', 'status' => array( 'publish', 'draft', 'future', 'pending', 'private' ) );
 		$search = sanitize_text_field( wp_unslash( $_REQUEST['search'] ?? '' ) );
 		$status = sanitize_key( $_REQUEST['status'] ?? '' );
 		if ( $search ) $args['s'] = $search;
@@ -440,7 +461,10 @@ final class PandaWoo_Quick_Core {
 		$args = (array) apply_filters( 'pandawoo_quick_product_query_args', $args, $search, $status );
 		$result = wc_get_products( $args );
 		$items = array();
-		foreach ( $result->products as $product ) $items[] = self::product_data( $product );
+		foreach ( $result->products as $product_id ) {
+			$item = self::product_list_data( $product_id );
+			if ( $item ) $items[] = $item;
+		}
 		wp_send_json_success( array( 'shop' => self::shop_context(), 'products' => $items, 'page' => $page, 'pages' => absint( $result->max_num_pages ) ) );
 	}
 

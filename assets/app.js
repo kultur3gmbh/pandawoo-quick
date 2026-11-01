@@ -44,6 +44,7 @@
 	var installPrompt = null;
 	var pairPoll = 0;
 	var pairPollAttempts = 0;
+	var pairPollFailures = 0;
 	var categoryOptions = Array.prototype.map.call(categorySelect.options, function (option) {
 		return { value: option.value, label: option.textContent };
 	});
@@ -65,8 +66,10 @@
 				try {
 					json = JSON.parse(text);
 				} catch (error) {
-					reportClientError(action, response.status);
-					throw new Error(config.i18n.invalidResponse || config.i18n.network);
+					// A second AJAX request would add pressure while the server is already
+					// returning 5xx errors. PHP's own error log remains authoritative.
+					if (response.status < 500) reportClientError(action, response.status);
+					throw new Error(response.status >= 500 ? (config.i18n.serverError || config.i18n.network) : (config.i18n.invalidResponse || config.i18n.network));
 				}
 				if (!response.ok || !json.success) throw new Error((json.data && json.data.message) || config.i18n.network);
 				return json.data;
@@ -140,17 +143,28 @@
 		var state = pairingPanel.querySelector('.pwq-pair-state');
 		request('pair_status', { pairing_id: pairingPanel.dataset.pairingId }).then(function (data) {
 			pairPollAttempts += 1;
+			pairPollFailures = 0;
 			if (data.status === 'connected') {
-				clearInterval(pairPoll);
+				clearTimeout(pairPoll);
 				renderInstallGuide(data.platform || 'unknown');
 			} else if (data.status === 'identifying' && pairPollAttempts >= 8) {
-				clearInterval(pairPoll);
+				clearTimeout(pairPoll);
 				renderInstallGuide('unknown');
 			} else if (data.status === 'expired') {
-				clearInterval(pairPoll);
+				clearTimeout(pairPoll);
 				if (state) state.textContent = config.i18n.pairExpired;
+			} else {
+				pairPoll = window.setTimeout(pollPairStatus, 3000);
 			}
-		}).catch(function () {});
+		}).catch(function (error) {
+			pairPollFailures += 1;
+			if (pairPollFailures >= 3) {
+				clearTimeout(pairPoll);
+				if (state) state.textContent = error.message;
+				return;
+			}
+			pairPoll = window.setTimeout(pollPairStatus, 3000 * pairPollFailures);
+		});
 	}
 
 	function loadProducts(reset) {
@@ -503,7 +517,7 @@
 	moreButton.addEventListener('click', function () { page += 1; loadProducts(false); });
 	if ('serviceWorker' in navigator && config.serviceWorkerUrl) navigator.serviceWorker.register(config.serviceWorkerUrl, { scope: config.serviceWorkerScope }).catch(function () {});
 	reportDevice();
-	if (pairingPanel) { pollPairStatus(); pairPoll = window.setInterval(pollPairStatus, 2000); }
+	if (pairingPanel) pollPairStatus();
 	loadProducts(true);
 }());
 

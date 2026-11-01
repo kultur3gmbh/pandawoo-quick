@@ -4,7 +4,7 @@ root=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
 php_file="$root/includes/class-pandawoo-quick-core.php"
 js_file="$root/assets/app.js"
 
-for needle in "new WC_Product_Simple" "wc_get_products" "pandawoo_quick_pair_" "secret_hash" "shop_id" "maxShops" "ajax_disconnect" "ajax_delete" "set_manage_stock" "pwq-stock-mode" "confirmDelete" "array_map( 'absint'" "contactpanda_available" "dismiss_product_info" "taxonomy_choices" "product_brand" "ajax_pair_status" "ajax_report_device" "beforeinstallprompt" "pwq-install-fallback" "genericMenuText" "guide-ios-share.svg" "pointerdown" "font-size:16px" "preparePhoto" "response.text" "ERROR_LOG_OPTION" "pwq-schedule\[hidden\]" "PANDAWOO_QUICK_API_VERSION" "pandawoo_quick_product_data" "pandawoo_quick_admin_menu"; do
+for needle in "new WC_Product_Simple" "wc_get_products" "pandawoo_quick_pair_" "secret_hash" "shop_id" "maxShops" "ajax_disconnect" "ajax_delete" "set_manage_stock" "pwq-stock-mode" "confirmDelete" "array_map( 'absint'" "contactpanda_available" "dismiss_product_info" "taxonomy_choices" "product_brand" "ajax_pair_status" "ajax_report_device" "beforeinstallprompt" "pwq-install-fallback" "genericMenuText" "guide-ios-share.svg" "pointerdown" "font-size:16px" "preparePhoto" "response.text" "ERROR_LOG_OPTION" "pwq-schedule\[hidden\]" "PANDAWOO_QUICK_API_VERSION" "pandawoo_quick_product_data" "pandawoo_quick_product_list_data" "product_list_data" "return' => 'ids" "pairPollFailures" "serverError" "pandawoo_quick_admin_menu"; do
 	if ! grep -q "$needle" "$php_file" "$root/pandawoo-quick.php" "$js_file" "$root/assets/app.css"; then
 		echo "Missing required implementation marker: $needle" >&2
 		exit 1

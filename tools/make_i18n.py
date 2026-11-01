@@ -31,6 +31,7 @@ DE.update({
 	"The product has been deleted.": "Das Produkt wurde gelöscht.",
     "Recent errors detected by PandaWoo Quick. No product or customer data is stored here.": "Zuletzt von PandaWoo Quick erkannte Fehler. Hier werden keine Produkt- oder Kundendaten gespeichert.",
     "The server returned an unreadable response. Please try again. If this happens again, check the technical error log in PandaWoo Quick.": "Der Server hat eine nicht lesbare Antwort gesendet. Bitte versuche es erneut. Falls das wieder passiert, prüfe das technische Fehlerprotokoll in PandaWoo Quick.",
+	"The server ran out of available resources. PandaWoo Quick stopped retrying automatically. Please try again after the server has recovered.": "Der Server hat die verfügbaren Ressourcen ausgeschöpft. PandaWoo Quick hat die automatischen Wiederholungen beendet. Bitte versuche es erneut, sobald sich der Server erholt hat.",
 	"WooCommerce could not delete the product.": "WooCommerce konnte das Produkt nicht löschen.",
 })
 
@@ -46,6 +47,7 @@ FORMAL_OVERRIDES = {
 FORMAL_OVERRIDES.update({
 	"Do you really want to delete the product “%s”? This cannot be undone.": "Möchten Sie das Produkt „%s“ wirklich löschen? Das ist nicht rückgängig zu machen.",
     "The server returned an unreadable response. Please try again. If this happens again, check the technical error log in PandaWoo Quick.": "Der Server hat eine nicht lesbare Antwort gesendet. Bitte versuchen Sie es erneut. Falls das wieder passiert, prüfen Sie das technische Fehlerprotokoll in PandaWoo Quick.",
+	"The server ran out of available resources. PandaWoo Quick stopped retrying automatically. Please try again after the server has recovered.": "Der Server hat die verfügbaren Ressourcen ausgeschöpft. PandaWoo Quick hat die automatischen Wiederholungen beendet. Bitte versuchen Sie es erneut, sobald sich der Server erholt hat.",
 })
 
 def quote(value):
