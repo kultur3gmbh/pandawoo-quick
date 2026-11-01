@@ -34,6 +34,9 @@
 	var scheduleInput = schedule.querySelector('input');
 	var message = root.querySelector('.pwq-message');
 	var deleteButton = root.querySelector('.pwq-delete-product');
+	var richEditor = root.querySelector('.pwq-rich-editor');
+	var richToolbar = root.querySelector('.pwq-rich-toolbar');
+	var builderWarning = root.querySelector('.pwq-builder-warning');
 	var qr = root.querySelector('.pwq-qr');
 	var page = 1;
 	var pages = 1;
@@ -217,6 +220,12 @@
 		stockQuantityInput.required = false;
 		stockQuantityInput.value = '0';
 		deleteButton.hidden = true;
+		form.elements.preserve_description.value = '0';
+		form.elements.description.value = '';
+		richEditor.innerHTML = '';
+		richEditor.contentEditable = 'true';
+		richToolbar.hidden = false;
+		builderWarning.hidden = true;
 		message.textContent = '';
 		categorySearch.value = '';
 		filterCategories();
@@ -240,6 +249,11 @@
 			form.elements.regular_price.value = product.price;
 			form.elements.short_description.value = product.shortDescription;
 			form.elements.description.value = product.description;
+			richEditor.innerHTML = product.description || '';
+			form.elements.preserve_description.value = product.descriptionProtected ? '1' : '0';
+			richEditor.contentEditable = product.descriptionProtected ? 'false' : 'true';
+			richToolbar.hidden = !!product.descriptionProtected;
+			builderWarning.hidden = !product.descriptionProtected;
 			stockMode.value = product.stockMode || 'instock';
 			stockQuantityInput.value = String(product.stockQuantity || 0);
 			toggleStockQuantity();
@@ -435,6 +449,7 @@
 
 	function submitForm(event) {
 		event.preventDefault();
+		if (form.elements.preserve_description.value !== '1') form.elements.description.value = richEditor.innerHTML;
 		if (!form.reportValidity()) return;
 		if (!photos.length) { message.textContent = config.i18n.photoRequired; return; }
 		var button = form.querySelector('button[type="submit"]');
@@ -462,6 +477,8 @@
 		window.jQuery(qr).empty().qrcode({ text: qr.dataset.url, width: 184, height: 184 });
 	}
 	newButton.addEventListener('click', openNew);
+	richToolbar.addEventListener('click', function (event) { var button = event.target.closest('[data-rich-command]'); if (!button) return; var command = button.dataset.richCommand; var value = null; if (command === 'createLink') { value = window.prompt('URL'); if (!value) return; } richEditor.focus(); document.execCommand(command, false, value); form.elements.description.value = richEditor.innerHTML; });
+	richEditor.addEventListener('input', function () { if (form.elements.preserve_description.value !== '1') form.elements.description.value = richEditor.innerHTML; });
 	if (disconnectButton) {
 		disconnectButton.addEventListener('click', function () {
 			if (!window.confirm(config.i18n.confirmDisconnect)) return;

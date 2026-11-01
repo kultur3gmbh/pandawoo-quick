@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: PandaWoo Quick 0.4.0\n"
+"Project-Id-Version: PandaWoo Quick 0.4.1\n"
 "Report-Msgid-Bugs-To: https://github.com/kultur3gmbh/pandawoo-quick/issues\n"
 "POT-Creation-Date: 2026-11-01 00:00+0000\n"
 "PO-Revision-Date: 2026-11-01 00:00+0000\n"
@@ -37,7 +37,7 @@ msgstr ""
 msgid "All statuses"
 msgstr ""
 
-#: includes/class-pandawoo-quick-core.php:535
+#: includes/class-pandawoo-quick-core.php:542
 msgid "An image selection is invalid."
 msgstr ""
 
@@ -45,7 +45,7 @@ msgstr ""
 msgid "An optional free CRM foundation for customer and contact management. PandaWoo Quick works fully without it."
 msgstr ""
 
-#: includes/class-pandawoo-quick-core.php:492
+#: includes/class-pandawoo-quick-core.php:499
 msgid "At least one photo could not be uploaded."
 msgstr ""
 
@@ -103,6 +103,10 @@ msgstr ""
 
 #: includes/class-pandawoo-quick-core.php:139
 msgid "Deleting product…"
+msgstr ""
+
+#: includes/class-pandawoo-quick-core.php:219
+msgid "Description formatting"
 msgstr ""
 
 #: includes/class-pandawoo-quick-core.php:219
@@ -173,6 +177,10 @@ msgstr ""
 msgid "Keep these instructions open on the computer and follow the steps on your phone."
 msgstr ""
 
+#: includes/class-pandawoo-quick-core.php:219
+msgid "List"
+msgstr ""
+
 #: includes/class-pandawoo-quick-core.php:200
 msgid "Load more"
 msgstr ""
@@ -217,7 +225,7 @@ msgstr ""
 msgid "No connected device was found."
 msgstr ""
 
-#: includes/class-pandawoo-quick-core.php:620
+#: includes/class-pandawoo-quick-core.php:627
 msgid "No connected shop session was found."
 msgstr ""
 
@@ -233,7 +241,7 @@ msgstr ""
 msgid "Now open the PandaWoo Quick icon on your Home Screen."
 msgstr ""
 
-#: includes/class-pandawoo-quick-core.php:494
+#: includes/class-pandawoo-quick-core.php:501
 msgid "Only JPEG, PNG and WebP images are allowed."
 msgstr ""
 
@@ -301,15 +309,15 @@ msgstr ""
 msgid "Photos"
 msgstr ""
 
-#: includes/class-pandawoo-quick-core.php:104 includes/class-pandawoo-quick-core.php:554
+#: includes/class-pandawoo-quick-core.php:104 includes/class-pandawoo-quick-core.php:561
 msgid "Please add at least one product photo."
 msgstr ""
 
-#: includes/class-pandawoo-quick-core.php:528
+#: includes/class-pandawoo-quick-core.php:535
 msgid "Please choose a future publication time."
 msgstr ""
 
-#: includes/class-pandawoo-quick-core.php:521
+#: includes/class-pandawoo-quick-core.php:528
 msgid "Please complete all required product fields."
 msgstr ""
 
@@ -317,7 +325,7 @@ msgstr ""
 msgid "Please select"
 msgstr ""
 
-#: includes/class-pandawoo-quick-core.php:522
+#: includes/class-pandawoo-quick-core.php:529
 msgid "Please select a valid brand."
 msgstr ""
 
@@ -341,11 +349,11 @@ msgstr ""
 msgid "Product name"
 msgstr ""
 
-#: includes/class-pandawoo-quick-core.php:513 includes/class-pandawoo-quick-core.php:596
+#: includes/class-pandawoo-quick-core.php:520 includes/class-pandawoo-quick-core.php:603
 msgid "Product not found or not editable."
 msgstr ""
 
-#: includes/class-pandawoo-quick-core.php:474
+#: includes/class-pandawoo-quick-core.php:481
 msgid "Product not found."
 msgstr ""
 
@@ -465,15 +473,15 @@ msgstr ""
 msgid "The code can be used once."
 msgstr ""
 
-#: includes/class-pandawoo-quick-core.php:583
+#: includes/class-pandawoo-quick-core.php:590
 msgid "The product has been created."
 msgstr ""
 
-#: includes/class-pandawoo-quick-core.php:602
+#: includes/class-pandawoo-quick-core.php:609
 msgid "The product has been deleted."
 msgstr ""
 
-#: includes/class-pandawoo-quick-core.php:583
+#: includes/class-pandawoo-quick-core.php:590
 msgid "The product has been saved."
 msgstr ""
 
@@ -489,7 +497,7 @@ msgstr ""
 msgid "The server returned an unreadable response. Please try again. If this happens again, check the technical error log in PandaWoo Quick."
 msgstr ""
 
-#: includes/class-pandawoo-quick-core.php:625
+#: includes/class-pandawoo-quick-core.php:632
 msgid "The shop has been disconnected. You can now pair this device with another shop."
 msgstr ""
 
@@ -499,6 +507,10 @@ msgstr ""
 
 #: includes/class-pandawoo-quick-core.php:131
 msgid "Then open PandaWoo Quick using the new icon on your Home Screen."
+msgstr ""
+
+#: includes/class-pandawoo-quick-core.php:219
+msgid "This description was created with a page builder. PandaWoo Quick displays it but leaves the original builder content unchanged."
 msgstr ""
 
 #: includes/class-pandawoo-quick-core.php:283
@@ -517,11 +529,11 @@ msgstr ""
 msgid "Waiting for the phone…"
 msgstr ""
 
-#: includes/class-pandawoo-quick-core.php:600
+#: includes/class-pandawoo-quick-core.php:607
 msgid "WooCommerce could not delete the product."
 msgstr ""
 
-#: includes/class-pandawoo-quick-core.php:571
+#: includes/class-pandawoo-quick-core.php:578
 msgid "WooCommerce could not save the product."
 msgstr ""
 
