@@ -48,6 +48,21 @@
 	var pairPoll = 0;
 	var pairPollAttempts = 0;
 	var pairPollFailures = 0;
+
+	function addActionIcon(control, action) {
+		if (!control || control.dataset.pwqActionReady === '1') return;
+		var icon = document.createElement('span');
+		icon.className = 'pwq-action-icon pwq-action-' + action;
+		icon.setAttribute('aria-hidden', 'true');
+		control.prepend(icon);
+		control.dataset.pwqActionReady = '1';
+	}
+
+	addActionIcon(installButton, 'install');
+	addActionIcon(newButton, 'add');
+	addActionIcon(moreButton, 'refresh');
+	addActionIcon(form && form.querySelector('.pwq-button[type="submit"]'), 'save');
+	addActionIcon(deleteButton, 'delete');
 	var categoryOptions = Array.prototype.map.call(categorySelect.options, function (option) {
 		return { value: option.value, label: option.textContent };
 	});

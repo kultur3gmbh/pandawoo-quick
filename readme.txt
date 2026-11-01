@@ -4,7 +4,7 @@ Tags: woocommerce, products, mobile, pwa
 Requires at least: 6.4
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 0.4.1
+Stable tag: 0.4.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -65,6 +65,9 @@ No. The only edition limit is one simultaneous shop connection. Product capture 
 Pairing codes expire after ten minutes and may be used once. Device secrets are stored only as SHA-256 hashes. Connected devices can be revoked in WordPress.
 
 == Changelog ==
+
+= 0.4.2 =
+* Unifies all large Quick actions with the shared neutral Panda button style and matching action icons.
 
 = 0.4.1 =
 * Reduces memory usage by loading compact product lists and bounding failed connection polling.
