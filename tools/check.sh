@@ -47,7 +47,7 @@ if grep -Rq "api.github.com/repos\|pre_set_site_transient_update_plugins\|plugin
 	exit 1
 fi
 
-if ! grep -q "Version: 0.4.4" "$root/pandawoo-quick.php" || ! grep -q "PANDAWOO_QUICK_VERSION', '0.4.4'" "$root/pandawoo-quick.php" || ! grep -q "Stable tag: 0.4.4" "$root/readme.txt"; then
+if ! grep -q "Version: 0.5.0" "$root/pandawoo-quick.php" || ! grep -q "PANDAWOO_QUICK_VERSION', '0.5.0'" "$root/pandawoo-quick.php" || ! grep -q "Stable tag: 0.5.0" "$root/readme.txt"; then
 	echo "Version metadata is not synchronized at 0.4.2." >&2
 	exit 1
 fi

@@ -4,7 +4,7 @@ Tags: woocommerce, products, mobile, pwa
 Requires at least: 6.4
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 0.4.4
+Stable tag: 0.5.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -65,6 +65,10 @@ No. The only edition limit is one simultaneous shop connection. Product capture 
 Pairing codes expire after ten minutes and may be used once. Device secrets are stored only as SHA-256 hashes. Connected devices can be revoked in WordPress.
 
 == Changelog ==
+
+= 0.5.0 =
+
+* Coordinates the standalone PandaWoo base with the PandaWoo Pro 0.8 family and the current shared Panda administration contracts.
 
 = 0.4.4 =
 
