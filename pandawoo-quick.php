@@ -2,7 +2,7 @@
 /**
  * Plugin Name: PandaWoo Quick
  * Description: Mobile WooCommerce product capture with a securely paired installable web app.
- * Version: 0.5.0
+ * Version: 0.5.1
  * Requires at least: 6.4
  * Requires PHP: 7.4
  * WC requires at least: 8.0
@@ -15,11 +15,16 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'PANDAWOO_QUICK_VERSION', '0.5.0' );
+define( 'PANDAWOO_QUICK_VERSION', '0.5.1' );
 define( 'PANDAWOO_QUICK_API_VERSION', '1.0' );
 define( 'PANDAWOO_QUICK_PATH', plugin_dir_path( __FILE__ ) );
 define( 'PANDAWOO_QUICK_URL', plugin_dir_url( __FILE__ ) );
 
 require_once PANDAWOO_QUICK_PATH . 'includes/class-pandawoo-quick-core.php';
 PandaWoo_Quick_Core::boot();
+
+// Included only in the GitHub distribution; WordPress.org remains independent.
+if ( is_readable( PANDAWOO_QUICK_PATH . 'includes/class-panda-public-bootstrap.php' ) ) {
+	require_once PANDAWOO_QUICK_PATH . 'includes/class-panda-public-bootstrap.php';
+}
 

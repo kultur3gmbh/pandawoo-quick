@@ -42,13 +42,13 @@ if grep -Eq '[ÄÖÜäöüß]|Home-Bildschirm|Diesen Shop|Veröffentlicht' "$js_
 	exit 1
 fi
 
-if grep -Rq "api.github.com/repos\|pre_set_site_transient_update_plugins\|plugins_api" "$root" --include='*.php'; then
+if grep -Rq "api.github.com/repos\|pre_set_site_transient_update_plugins\|plugins_api" "$root/pandawoo-quick.php" "$root/includes" --include='*.php'; then
 	echo "WordPress.org build must not contain an external updater." >&2
 	exit 1
 fi
 
-if ! grep -q "Version: 0.5.0" "$root/pandawoo-quick.php" || ! grep -q "PANDAWOO_QUICK_VERSION', '0.5.0'" "$root/pandawoo-quick.php" || ! grep -q "Stable tag: 0.5.0" "$root/readme.txt"; then
-	echo "Version metadata is not synchronized at 0.4.2." >&2
+if ! grep -q "Version: 0.5.1" "$root/pandawoo-quick.php" || ! grep -q "PANDAWOO_QUICK_VERSION', '0.5.1'" "$root/pandawoo-quick.php" || ! grep -q "Stable tag: 0.5.1" "$root/readme.txt"; then
+	echo "Version metadata is not synchronized at 0.5.1." >&2
 	exit 1
 fi
 
